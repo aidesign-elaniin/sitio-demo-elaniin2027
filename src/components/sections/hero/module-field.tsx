@@ -10,11 +10,11 @@ import { MODULE_PITCH as PITCH, modulePattern } from "@/lib/module-pattern";
   The resting grid is pure CSS (no JS needed). The lit layer is a canvas, off for touch and prefers-reduced-motion.
   Listens on its parent element.
 */
-const RADIUS = 6; // cells of influence around the pointer
-const DECAY_MS = 260; // time constant of the fade-out
+export const RADIUS = 6; // cells of influence around the pointer
+export const DECAY_MS = 260; // time constant of the fade-out
 
 // Stepped ramp, brightest first: echoes the stepped blue motif.
-const STEPS = [
+export const STEPS = [
   { min: 0.66, token: "--color-blue-500", size: 3 },
   { min: 0.33, token: "--color-blue-400", size: 3 },
   { min: 0.04, token: "--color-blue-300", size: 2 },

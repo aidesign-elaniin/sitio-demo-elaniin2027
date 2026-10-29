@@ -1,17 +1,18 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { DECAY_MS, RADIUS, STEPS } from "@/components/sections/hero/module-field";
 import { MODULE_PITCH as PITCH } from "@/lib/module-pattern";
 
 /*
   Applied AI hero field: the module grid turned into a living halftone (references: the generative dot waves, the
   halftone blobs and the dot sphere of the board, design-system/elaniin-2027/brief.md). Every cell is one square whose
-  size follows two slow waves, so the field breathes like a model thinking; near the pointer a lens enlarges the
-  squares and lights them in the on-dark accent. Squares only (the module language), colors from tokens, a fade toward
-  the text column. It runs only while on screen and the tab is visible; under reduced motion it draws one still frame
-  and the lens is off. Decorative.
+  size follows two slow waves, so the field breathes like a model thinking. The pointer behaves as in every other
+  module field of the site (ModuleField, same radius, decay and blue steps): cells light up around it, a still pointer
+  leaves a spot that fades, a moving one leaves a trail that thins out as it fades. Squares only (the module language),
+  colors from tokens, a fade toward the text column. It runs only while on screen and the tab is visible; under reduced
+  motion it draws one still frame and the pointer trail is off. Decorative.
 */
-const LENS = 140; // px radius of the pointer lens
 
 export function AiField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -25,7 +26,7 @@ export function AiField() {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const root = getComputedStyle(document.documentElement);
     const rest = root.getPropertyValue("--color-text-on-dark").trim() || "#ffffff";
-    const lit = root.getPropertyValue("--color-text-on-dark-accent").trim() || "#7b9bff";
+    const steps = STEPS.map((step) => root.getPropertyValue(step.token).trim() || "#1054ff");
 
     let w = 0;
     let h = 0;
@@ -42,16 +43,17 @@ export function AiField() {
     };
     resize();
 
-    const pointer = { x: -9999, y: -9999, on: 0 };
+    const trail = new Map<number, number>(); // cell index -> intensity 0..1, decaying
     let raf = 0;
+    let last = 0;
     let visible = false;
 
     const frame = (now: number) => {
       const t = reduce ? 0 : now / 1000;
+      const k = Math.exp(-(last ? now - last : 16) / DECAY_MS);
+      last = now;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
-      // The lens eases in and out instead of popping.
-      pointer.on += ((pointer.x > -9999 ? 1 : 0) - pointer.on) * 0.12;
 
       const cols = Math.ceil(w / PITCH);
       const rows = Math.ceil(h / PITCH);
@@ -66,18 +68,28 @@ export function AiField() {
             w < 768
               ? Math.min(1, Math.max(0, (y / h - 0.78) / 0.22))
               : Math.min(1, Math.max(0, (x / w - 0.2) / 0.5));
-          const dx = x - pointer.x;
-          const dy = y - pointer.y;
-          // The lens also stays off the text column, so it never sits under the copy.
-          const lens = pointer.on * side * Math.exp(-(dx * dx + dy * dy) / (2 * LENS * LENS));
-          const size = 1 + wave * 3 * side + lens * 6;
-          if (size < 1.2 && lens < 0.05) continue;
-          ctx.globalAlpha = Math.min(1, 0.08 + wave * 0.3 * side + lens * 0.9);
-          ctx.fillStyle = lens > 0.25 ? lit : rest;
+          const size = 1 + wave * 3 * side;
+          if (size < 1.2) continue;
+          ctx.globalAlpha = Math.min(1, 0.08 + wave * 0.3 * side);
+          ctx.fillStyle = rest;
           ctx.fillRect(x - size / 2, y - size / 2, size, size);
         }
       }
       ctx.globalAlpha = 1;
+
+      // The pointer trail, drawn over the wave exactly like ModuleField: stepped blues, fading out.
+      for (const [key, v] of trail) {
+        const next = v * k;
+        if (next < 0.04) {
+          trail.delete(key);
+          continue;
+        }
+        trail.set(key, next);
+        const step = STEPS.findIndex((s) => next >= s.min);
+        const { size } = STEPS[step];
+        ctx.fillStyle = steps[step];
+        ctx.fillRect((key % cols) * PITCH + PITCH / 2 - size / 2, Math.floor(key / cols) * PITCH + PITCH / 2 - size / 2, size, size);
+      }
       if (!reduce && visible) raf = requestAnimationFrame(frame);
     };
 
@@ -105,17 +117,25 @@ export function AiField() {
     const onMove = (e: PointerEvent) => {
       if (e.pointerType === "touch") return;
       const r = host.getBoundingClientRect();
-      pointer.x = e.clientX - r.left;
-      pointer.y = e.clientY - r.top;
-    };
-    const onLeave = () => {
-      pointer.x = -9999;
-      pointer.y = -9999;
+      const cx = (e.clientX - r.left) / PITCH;
+      const cy = (e.clientY - r.top) / PITCH;
+      const cols = Math.ceil(w / PITCH);
+      for (let dy = -RADIUS; dy <= RADIUS; dy++) {
+        for (let dx = -RADIUS; dx <= RADIUS; dx++) {
+          const col = Math.floor(cx) + dx;
+          const row = Math.floor(cy) + dy;
+          if (col < 0 || col >= cols || row < 0) continue;
+          const d = Math.hypot(col + 0.5 - cx, row + 0.5 - cy);
+          if (d > RADIUS) continue;
+          const v = Math.pow(1 - d / RADIUS, 1.4);
+          const key = row * cols + col;
+          if (v > (trail.get(key) ?? 0)) trail.set(key, v);
+        }
+      }
     };
     const onVisibility = () => (document.hidden ? stop() : start());
     if (!reduce) {
       host.addEventListener("pointermove", onMove);
-      host.addEventListener("pointerleave", onLeave);
     }
     document.addEventListener("visibilitychange", onVisibility);
 
@@ -124,7 +144,6 @@ export function AiField() {
       io.disconnect();
       ro.disconnect();
       host.removeEventListener("pointermove", onMove);
-      host.removeEventListener("pointerleave", onLeave);
       document.removeEventListener("visibilitychange", onVisibility);
     };
   }, []);
