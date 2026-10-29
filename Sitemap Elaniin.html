@@ -1,0 +1,1038 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sitemap Elaniin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Colores tomados de elaniin.com */
+    --blue: #023BFD;
+    --blue-600: #0E54FE;
+    --blue-400: #4D75FD;
+    --blue-200: #C3D4FF;
+    --blue-50: #F0F4FF;
+    --navy: #000083;
+    --ink: #000040;
+    --text: #121212;
+    --text-2: #313131;
+    --muted: #595959;
+    --faint: #929292;
+    --line: #D8D8D8;
+    --line-2: #EFEFEF;
+    --canvas: #F6F6F7;
+    --surface: #FFFFFF;
+    --frame: #E4E4E7;
+
+    --node-w: 272px;
+    --node-h: 76px;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    font-family: "DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--text);
+    background: var(--frame);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font: inherit; color: inherit; cursor: pointer; }
+
+  .app {
+    height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    padding: 16px;
+    gap: 12px;
+  }
+
+  /* ---------- Barra superior ---------- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 12px 16px 12px 20px;
+    min-width: 0;
+  }
+  .title-block { min-width: 0; flex: 1; }
+  .title-block h1 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .title-block p {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .search {
+    position: relative;
+    width: 320px;
+    flex-shrink: 0;
+  }
+  .search input {
+    width: 100%;
+    height: 40px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0 40px 0 38px;
+    font: inherit;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--surface);
+    outline: none;
+  }
+  .search input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-200); }
+  .search .s-ico {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    color: var(--faint); pointer-events: none;
+  }
+  .search kbd {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    font: 500 11px/1 "DM Sans", sans-serif;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 3px 6px;
+    background: var(--canvas);
+  }
+  .results {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0; right: 0;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(0, 0, 64, .12);
+    padding: 6px;
+    z-index: 50;
+    max-height: 60vh;
+    overflow-y: auto;
+    display: none;
+  }
+  .results.open { display: block; }
+  .results button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: 0;
+    background: none;
+    border-radius: 8px;
+    padding: 8px 10px;
+  }
+  .results button:hover, .results button.active { background: var(--blue-50); }
+  .results .r-title { font-size: 14px; font-weight: 600; }
+  .results .r-path { font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .results mark { background: var(--blue-200); color: inherit; border-radius: 3px; padding: 0 1px; }
+  .results .empty { padding: 10px; font-size: 13px; color: var(--muted); }
+
+  .btn {
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 14px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .btn:hover { border-color: var(--faint); }
+  .btn-group { display: flex; gap: 8px; flex-shrink: 0; }
+
+  /* ---------- Área principal ---------- */
+  .main {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 12px;
+    min-height: 0;
+  }
+
+  .canvas {
+    position: relative;
+    background-color: var(--canvas);
+    background-image: radial-gradient(circle, #D2D2D6 1px, transparent 1.2px);
+    background-size: 20px 20px;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: grab;
+    touch-action: none;
+    min-width: 0;
+  }
+  .canvas.dragging { cursor: grabbing; }
+  .canvas.dragging .node { cursor: grabbing; }
+
+  .world {
+    position: absolute;
+    left: 0; top: 0;
+    transform-origin: 0 0;
+  }
+  .world > svg {
+    position: absolute;
+    left: 0; top: 0;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .edge { fill: none; stroke: #C4C4C8; stroke-width: 1.5; }
+  .edge.off { stroke: #B4B4B8; stroke-dasharray: 4 4; }
+  .edge.key { stroke: var(--blue); stroke-width: 2; }
+
+  /* ---------- Nodos ---------- */
+  .node {
+    position: absolute;
+    width: var(--node-w);
+    height: var(--node-h);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px 0 12px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: 0 1px 2px rgba(0, 0, 64, .04);
+    cursor: pointer;
+    user-select: none;
+    transition: box-shadow .15s, border-color .15s, opacity .2s;
+  }
+  .node:hover { border-color: var(--faint); box-shadow: 0 4px 14px rgba(0, 0, 64, .08); }
+  .node.enter { animation: enter .22s ease-out; }
+  @keyframes enter { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: none; } }
+
+  .node .ico {
+    width: 36px; height: 36px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: var(--blue-50);
+    color: var(--blue);
+  }
+  .node .txt { min-width: 0; flex: 1; }
+  .node .t {
+    font-size: 14.5px;
+    font-weight: 600;
+    line-height: 1.22;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .node .s {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .node .chev {
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    display: grid; place-items: center;
+    color: var(--muted);
+    border-radius: 6px;
+    transition: transform .18s;
+  }
+  .node.open .chev { transform: rotate(-90deg); }
+  .node .count {
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    background: var(--line-2);
+    border-radius: 999px;
+    padding: 2px 8px;
+  }
+
+  /* Fuera del nav primario */
+  .node.off {
+    border-style: dashed;
+    border-color: #A8A8AC;
+    background: #FBFBFB;
+  }
+  .node.off .ico { background: transparent; border: 1px dashed #A8A8AC; color: var(--muted); }
+  .node.off .t { color: var(--text-2); }
+
+  /* Applied AI: rama diferenciadora */
+  .node.key {
+    background: var(--ink);
+    border-color: var(--ink);
+    box-shadow: 0 0 0 4px var(--blue-200);
+  }
+  .node.key:hover { box-shadow: 0 0 0 4px var(--blue-200), 0 8px 20px rgba(0, 0, 64, .2); }
+  .node.key .ico { background: var(--blue); color: #fff; }
+  .node.key .t { color: #fff; }
+  .node.key .s { color: #AFC0FF; }
+  .key-flag {
+    position: absolute;
+    top: -12px; left: 14px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .02em;
+    color: #fff;
+    background: var(--blue);
+    border-radius: 6px;
+    padding: 3px 8px;
+    white-space: nowrap;
+  }
+
+  /* Estados */
+  .node.selected { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-200); }
+  .node.off.selected { border-style: solid; }
+  .node.key.selected { box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--blue); }
+  .node.dim { opacity: .35; }
+  .node.hit .t mark { background: var(--blue-200); color: inherit; border-radius: 3px; padding: 0 1px; }
+  .node.key.hit .t mark { background: var(--blue); color: #fff; }
+
+  /* ---------- Controles flotantes ---------- */
+  .legend {
+    position: absolute;
+    top: 16px; left: 16px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    gap: 18px;
+    font-size: 13px;
+    color: var(--text-2);
+    z-index: 5;
+    flex-wrap: wrap;
+    max-width: calc(100% - 32px);
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+  .sw { width: 18px; height: 12px; border-radius: 4px; display: inline-block; }
+  .sw.nav { background: var(--surface); border: 1.5px solid var(--blue-400); }
+  .sw.off { background: #FBFBFB; border: 1.5px dashed #8A8A8E; }
+  .sw.key { background: var(--ink); box-shadow: 0 0 0 2px var(--blue-200); }
+  .legend b { font-weight: 600; color: var(--text); }
+
+  .toolbar {
+    position: absolute;
+    bottom: 16px;
+    display: flex;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    z-index: 5;
+  }
+  .toolbar.left { left: 16px; }
+  .toolbar.right { right: 16px; }
+  .toolbar button {
+    height: 40px;
+    min-width: 40px;
+    padding: 0 12px;
+    border: 0;
+    background: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .toolbar button + button, .toolbar .zoom-val + button { border-left: 1px solid var(--line); }
+  .toolbar button:hover { background: var(--canvas); }
+  .zoom-val {
+    min-width: 54px;
+    display: grid; place-items: center;
+    font-size: 13px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    border-left: 1px solid var(--line);
+  }
+
+  /* ---------- Panel lateral ---------- */
+  .panel {
+    background: var(--surface);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .panel-scroll { overflow-y: auto; padding: 20px 24px 24px; flex: 1; }
+  .panel-close { display: none; }
+
+  .crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .crumbs button {
+    border: 0; background: none; padding: 2px 4px; border-radius: 5px;
+    color: var(--muted); font-size: 12.5px;
+  }
+  .crumbs button:hover { background: var(--line-2); color: var(--text); }
+  .crumbs .sep { color: #BDBDBD; }
+  .crumbs .here { color: var(--text); font-weight: 500; padding: 2px 4px; }
+
+  .head-card {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+  }
+  .head-card .ico {
+    width: 44px; height: 44px; flex-shrink: 0;
+    border-radius: 12px;
+    display: grid; place-items: center;
+    background: var(--blue-50); color: var(--blue);
+  }
+  .head-card.off { border-style: dashed; border-color: #A8A8AC; }
+  .head-card.off .ico { background: transparent; border: 1px dashed #A8A8AC; color: var(--muted); }
+  .head-card.key { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .head-card.key .ico { background: var(--blue); color: #fff; }
+  .head-card h2 { margin: 0; font-size: 20px; font-weight: 600; line-height: 1.25; letter-spacing: -0.01em; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .chip {
+    font-size: 12px; font-weight: 500;
+    border-radius: 999px;
+    padding: 3px 10px;
+    background: var(--blue-50);
+    color: var(--navy);
+  }
+  .chip.off { background: var(--line-2); color: var(--text-2); }
+  .chip.key { background: var(--blue); color: #fff; }
+  .head-card.key .chip:not(.key) { background: rgba(255,255,255,.12); color: #DCE4FF; }
+
+  .block { margin-top: 24px; }
+  .label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .label .n { font-weight: 500; letter-spacing: 0; text-transform: none; }
+  .objetivo { margin: 0; font-size: 15px; line-height: 1.55; color: var(--text-2); }
+
+  .secciones { list-style: none; margin: 0; padding: 0; counter-reset: s; }
+  .secciones li {
+    counter-increment: s;
+    display: flex;
+    gap: 12px;
+    padding: 9px 0;
+    border-top: 1px solid var(--line-2);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+  .secciones li:first-child { border-top: 0; padding-top: 2px; }
+  .secciones li::before {
+    content: counter(s, decimal-leading-zero);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--faint);
+    font-variant-numeric: tabular-nums;
+    padding-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .pending {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 12px 14px;
+    border: 1px dashed #A8A8AC;
+    border-radius: 10px;
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+  .pending b { color: var(--text-2); font-weight: 600; }
+
+  .kids { display: grid; gap: 6px; }
+  .kid {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .kid:hover { border-color: var(--blue-400); background: var(--blue-50); }
+  .kid.off { border-style: dashed; }
+  .kid .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); flex-shrink: 0; }
+  .kid.off .dot { background: transparent; border: 1.5px solid var(--faint); }
+  .kid.key .dot { background: var(--ink); box-shadow: 0 0 0 2px var(--blue-200); }
+  .kid .grow { flex: 1; min-width: 0; }
+  .kid .meta { font-size: 12px; color: var(--muted); font-weight: 400; white-space: nowrap; }
+  .kid svg { color: var(--faint); flex-shrink: 0; }
+
+  .meta-line {
+    margin-top: 24px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line-2);
+    font-size: 12px;
+    color: var(--faint);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1180px) {
+    .main { grid-template-columns: 1fr 360px; }
+    .search { width: 260px; }
+    .btn-group .btn .lbl { display: none; }
+  }
+  @media (max-width: 900px) {
+    .app { padding: 10px; gap: 10px; }
+    .topbar { flex-wrap: wrap; padding: 12px; }
+    .title-block { flex-basis: 100%; }
+    .search { flex: 1; width: auto; min-width: 0; }
+    .search kbd { display: none; }
+    .main { grid-template-columns: 1fr; }
+    .panel {
+      position: fixed;
+      left: 10px; right: 10px; bottom: 10px;
+      max-height: 70vh;
+      box-shadow: 0 -8px 40px rgba(0, 0, 64, .2);
+      transform: translateY(calc(100% + 20px));
+      transition: transform .25s ease;
+      z-index: 40;
+    }
+    .panel.open { transform: none; }
+    .panel-close {
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px 12px 0;
+    }
+    .panel-close button {
+      border: 1px solid var(--line); background: var(--surface);
+      border-radius: 8px; height: 32px; padding: 0 12px; font-size: 13px;
+    }
+    .panel-scroll { padding-top: 6px; }
+    .legend { gap: 10px; font-size: 12px; }
+    .toolbar.left button .lbl { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="title-block">
+      <h1>Arquitectura de información · elaniin.com</h1>
+      <p id="summary"></p>
+    </div>
+    <div class="search">
+      <svg class="s-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="text" placeholder="Buscar página…" autocomplete="off" spellcheck="false" aria-label="Buscar página por nombre">
+      <kbd>/</kbd>
+      <div class="results" id="results" role="listbox"></div>
+    </div>
+  </header>
+
+  <div class="main">
+    <section class="canvas" id="canvas" aria-label="Árbol del sitemap">
+      <div class="legend">
+        <span><i class="sw nav"></i><b id="lg-nav"></b>&nbsp;En nav primario</span>
+        <span><i class="sw off"></i><b id="lg-off"></b>&nbsp;Fuera del nav (reachable desde Home)</span>
+        <span><i class="sw key"></i>Applied AI · diferenciador de marca</span>
+      </div>
+
+      <div class="world" id="world">
+        <svg id="edges" width="1" height="1"></svg>
+      </div>
+
+      <div class="toolbar left">
+        <button id="expandAll" title="Expandir todo">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"/></svg>
+          <span class="lbl">Expandir todo</span>
+        </button>
+        <button id="collapseAll" title="Colapsar a Home">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 20 5-5 5 5M7 4l5 5 5-5"/></svg>
+          <span class="lbl">Colapsar</span>
+        </button>
+      </div>
+
+      <div class="toolbar right">
+        <button id="zoomOut" title="Alejar" aria-label="Alejar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></svg>
+        </button>
+        <div class="zoom-val" id="zoomVal">100%</div>
+        <button id="zoomIn" title="Acercar" aria-label="Acercar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <button id="fit" title="Ajustar a la pantalla" aria-label="Ajustar a la pantalla">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <aside class="panel" id="panel" aria-live="polite">
+      <div class="panel-close"><button id="closePanel">Cerrar</button></div>
+      <div class="panel-scroll" id="panelBody"></div>
+    </aside>
+  </div>
+</div>
+
+<script>
+const DATA = {
+  "home": {
+    "title": "Home",
+    "nav": true,
+    "parent": null,
+    "objetivo": "Que alguien que no conoce Elaniin entienda en 10 segundos qué resuelve y encuentre su camino: por problema (value axes) o por lo que ya sabe que necesita (Solutions).",
+    "secciones": ["Hero con la promesa de marca", "3 tarjetas de value axes", "Sección propia de Applied AI", "Franja de prueba (clientes + Google Cloud)", "Bloque de industrias", "CTA a Contact Us"],
+    "children": ["solutions", "engagement-models", "applied-ai", "resources", "contact-us", "industries", "scale-your-engineering-team", "modernize-a-critical-system", "deliver-technology-behind-growth"]
+  },
+  "solutions": {"title":"Solutions (Services)","nav":true,"parent":"home","objetivo":"Orientar a quien ya sabe qué tipo de trabajo necesita (construir, migrar, automatizar) hacia la categoría correcta.","secciones":["Intro: las 3 categorías son un solo equipo","3 bloques de entrada","Mención de Applied AI con link"],"children":["software-development","cloud","ai-solutions"]},
+  "software-development": {"title":"Software Development","nav":true,"parent":"solutions","objetivo":"Mostrar que Elaniin construye y sostiene software de misión crítica en producción. Categoría con más evidencia (gobierno + banca).","secciones":["Intro: modernizar vs. construir","4 bloques de subservicio","Franja de prueba: DGME, MTPS, IFES/TSE, Banco Azul, Credicomer"],"children":["custom-software-development","application-modernization","mobile-app-development","software-support-evolution"]},
+  "custom-software-development": {"title":"Custom Software Development","nav":true,"parent":"software-development","objetivo":"Para quien necesita un sistema o producto que no existe y no tiene con quién construirlo: Gerente General, titular, director de TI.","secciones":["Problema","Qué incluye (arquitectura, backend, frontend, QA)","Evidencia (DGME, MTPS, IFES/TSE, Beelder, uSource)","Cómo trabajamos (link a Applied AI)","Modelos sugeridos"],"children":[]},
+  "application-modernization": {"title":"Application Modernization","nav":true,"parent":"software-development","objetivo":"Para el sistema que ya frena el negocio: Director de TI o Transformación Digital. El eje con más evidencia de demanda en los 3 mercados.","secciones":["Problema","Qué incluye (re-arquitectura, microservicios)","Evidencia (Tegra, Core Funcional GOES)","Migración sin interrupción","Modelos sugeridos"],"children":[]},
+  "mobile-app-development": {"title":"Mobile App Development","nav":true,"parent":"software-development","objetivo":"El canal digital que conecta al cliente o ciudadano: gerente de canales digitales.","secciones":["Problema","Qué incluye (mobile nativo e híbrido, integración bancaria)","Evidencia (Banco Azul, Credicomer, Diimo, FGR)","Modelos sugeridos"],"children":[]},
+  "software-support-evolution": {"title":"Software Support & Evolution","nav":true,"parent":"software-development","objetivo":"Para quien ya construyó con Elaniin y necesita continuidad. NO es puerta de entrada.","secciones":["Qué cubre (SLA, mantenimiento, evolución)","Evidencia (ASESUISA, Abaco, ITCA, RNPN, Alianza Américas)","Por qué el mismo equipo"],"children":[]},
+  "cloud": {"title":"Cloud","nav":true,"parent":"solutions","objetivo":"Para quien ya sabe que el problema es de infraestructura: costos, escalabilidad o vencimiento de contrato.","secciones":["Intro: credencial Google Cloud","2 bloques","Franja de prueba: uSource, IBEX, Procesar"],"children":["cloud-migration","api-management-integration"]},
+  "cloud-migration": {"title":"Cloud Migration","nav":true,"parent":"cloud","objetivo":"Costos de nube altos, vencimiento de contrato o infraestructura que no escala: CTO, Gerente de Finanzas.","secciones":["Problema","Qué incluye (migración GCP, arquitectura)","Evidencia (uSource, IBEX, Abaco, Diimo, Mercandú, GOES)","Incentivo Google Cloud","Modelos sugeridos"],"children":[]},
+  "api-management-integration": {"title":"API Management & Integration","nav":true,"parent":"cloud","objetivo":"Sistemas que no se hablan o APIs sin control en entornos regulados: Director de TI. El caso más fuerte en entorno regulado y en México.","secciones":["Problema","Qué incluye (Apigee, Application Integration)","Evidencia (Procesar ~150 APIs, Invercap, Credicomer)","Modelos sugeridos"],"children":[]},
+  "ai-solutions": {"title":"AI Solutions","nav":true,"parent":"solutions","objetivo":"Para quien quiere automatizar un proceso real, no probar un piloto de IA: Gerente de Operaciones, Dueño.","secciones":["Intro: diferencia con Applied AI","1 bloque","Franja de prueba: Donkeys, GOES, Publimóvil, Ambassador"],"children":["ai-agents-process-automation"]},
+  "ai-agents-process-automation": {"title":"AI Agents & Process Automation","nav":true,"parent":"ai-solutions","objetivo":"Procesos manuales que no escalan sin crecer el equipo: pedidos, trámites, documentos.","secciones":["Problema","Qué incluye (agentes, n8n, LLM, extracción de documentos)","Evidencia (Donkeys, GOES, Publimóvil, Ambassador)","Por qué no es un piloto","Modelos sugeridos"],"children":[]},
+  "engagement-models": {"title":"Engagement Models","nav":true,"parent":"home","objetivo":"Para quien ya decidió trabajar con Elaniin y necesita saber cómo se contrata.","secciones":["Intro: 3 modelos en una frase","3 bloques","Comparativa"],"children":["staff-augmentation","dedicated-development-teams","project-delivery"]},
+  "staff-augmentation": {"title":"Staff Augmentation","nav":true,"parent":"engagement-models","objetivo":"Para el CTO/VP Engineering con roadmap pero sin gente, término que ya busca el comprador de EE. UU.","secciones":["Problema","Cómo funciona (perfiles, arranque, overlap horario)","Recursos nombrados","Evidencia (Jostens, PuntoXpress)"],"children":[]},
+  "dedicated-development-teams": {"title":"Dedicated Development Teams","nav":true,"parent":"engagement-models","objetivo":"Para quien necesita un equipo completo, no una persona suelta.","secciones":["Problema","Cómo funciona (squad dedicado)","Evidencia"],"children":[]},
+  "project-delivery": {"title":"Project Delivery","nav":true,"parent":"engagement-models","objetivo":"Para quien quiere un resultado, no un equipo. Discovery como fase 0.","secciones":["Problema","Cómo funciona (discovery, fases, entregables)","Evidencia"],"children":[]},
+  "applied-ai": {"title":"Applied AI","nav":true,"parent":"home","objetivo":"No es un servicio: es cómo Elaniin entrega los otros tres (Software Development, Cloud y AI Solutions). Es el diferenciador de marca que conecta todo lo que la empresa construye.","secciones":["Pilares: capacidad 100x, human-in-the-loop, entregables diferenciados","Cómo se ve en cada servicio","Evidencia (Delta Force GOES, Atlas Builder)"],"children":[]},
+  "resources": {"title":"Resources","nav":true,"parent":"home","objetivo":"Prueba social y de pensamiento para quien todavía evalúa.","secciones":["Intro","2 bloques"],"children":["use-cases","research"]},
+  "use-cases": {"title":"Use Cases","nav":true,"parent":"resources","objetivo":"Casos de clientes por industria.","secciones":["Filtro por industria","Tarjetas de caso"],"children":[]},
+  "research": {"title":"Research","nav":true,"parent":"resources","objetivo":"Investigaciones propias y contenido editorial. Funciona como el blog de la marca.","secciones":["Listado de artículos","Filtro por tema"],"children":[]},
+  "contact-us": {"title":"Contact Us","nav":true,"parent":"home","objetivo":"Cerrar la conversión con la menor fricción posible.","secciones":["Formulario","Contacto directo","Qué esperar después"],"children":[]},
+  "industries": {"title":"Industries","nav":false,"parent":"home","objetivo":"Validar que Elaniin entiende el sector antes de que lo pregunten.","secciones":["Intro","Stats","Certificaciones"],"children":["public-sector","financial-services","restaurants","retail"]},
+  "public-sector": {"title":"Public Sector","nav":false,"parent":"industries","objetivo":"Titular o director de modernización, UACI: 76.4% del valor histórico viene de aquí; GOES explica 51.2%.","secciones":["Data","Casos de uso","Proyecto destacado"],"children":[]},
+  "financial-services": {"title":"Financial Services","nav":false,"parent":"industries","objetivo":"Director de TI y Transformación Digital, gerente de canales digitales.","secciones":["Data","Casos de uso","Proyecto destacado"],"children":[]},
+  "restaurants": {"title":"Restaurants","nav":false,"parent":"industries","objetivo":"Dueño o gerente general de cadena de restaurantes.","secciones":["Data","Casos de uso","Proyecto destacado"],"children":[]},
+  "retail": {"title":"Retail","nav":false,"parent":"industries","objetivo":"Mercado objetivo en expansión, todavía sin caso cerrado.","secciones":["Data","Casos de uso","Proyecto destacado"],"children":[]},
+  "scale-your-engineering-team": {"title":"Scale your engineering team","nav":false,"parent":"home","objetivo":"\"Tenemos el roadmap, no la gente.\" Para quien ya tiene equipo propio pero no la capacidad para cumplir lo que tiene planeado.","secciones":["Servicios que combina","Caso (Jostens, PuntoXpress)","Modelo sugerido"],"children":[]},
+  "modernize-a-critical-system": {"title":"Modernize a critical system","nav":false,"parent":"home","objetivo":"\"El sistema ya no aguanta.\" Para quien depende de un sistema que ya frena la operación del negocio.","secciones":["Servicios que combina","Caso (Procesar, Tegra, uSource)","Modelo sugerido"],"children":[]},
+  "deliver-technology-behind-growth": {"title":"Deliver the technology behind growth","nav":false,"parent":"home","objetivo":"\"Tenemos que lanzar esto y nadie lo puede entregar.\" Para quien necesita una plataforma, producto o servicio digital nuevo, de punta a punta. En sector público se adapta como los servicios que la institución pone en manos de la ciudadanía.","secciones":["Servicios que combina","Caso (DGME, Banco Azul, Mercandú, Donkeys)","Modelo sugerido"],"children":[]}
+};
+
+const ROOT = "home";
+const KEY = "applied-ai";
+
+// Geometría del árbol
+const NODE_W = 272, NODE_H = 76, COL_GAP = 76, ROW_GAP = 12;
+
+const ICONS = {
+  page: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>',
+  home: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg>',
+  folder: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg>',
+  key: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><circle cx="12" cy="12" r="3"/></svg>',
+  chev: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
+  arrow: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>',
+  info: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>'
+};
+
+const $ = (s) => document.querySelector(s);
+const canvas = $("#canvas"), world = $("#world"), edgesSvg = $("#edges");
+
+const state = {
+  expanded: new Set([ROOT]),
+  selected: ROOT,
+  query: "",
+  view: { x: 0, y: 0, k: 1 },
+  pos: {},
+  shown: new Set()
+};
+
+// ---------- utilidades ----------
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const norm = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
+function ancestors(id) {
+  const out = [];
+  let p = DATA[id].parent;
+  while (p) { out.unshift(p); p = DATA[p].parent; }
+  return out;
+}
+function iconFor(id) {
+  if (id === KEY) return ICONS.key;
+  if (id === ROOT) return ICONS.home;
+  return DATA[id].children.length ? ICONS.folder : ICONS.page;
+}
+function kind(id) {
+  if (id === KEY) return "key";
+  return DATA[id].nav ? "nav" : "off";
+}
+function highlight(text, q) {
+  if (!q) return esc(text);
+  const i = norm(text).indexOf(norm(q));
+  if (i < 0) return esc(text);
+  return esc(text.slice(0, i)) + "<mark>" + esc(text.slice(i, i + q.length)) + "</mark>" + esc(text.slice(i + q.length));
+}
+function matches(id, q) {
+  return norm(DATA[id].title).includes(norm(q)) || id.includes(norm(q).replace(/\s+/g, "-"));
+}
+
+// ---------- layout ----------
+function layout() {
+  const pos = {};
+  let cursor = 0;
+  (function walk(id, depth) {
+    const kids = state.expanded.has(id) ? DATA[id].children : [];
+    const x = depth * (NODE_W + COL_GAP);
+    if (kids.length) {
+      kids.forEach((k) => walk(k, depth + 1));
+      const first = pos[kids[0]].y, last = pos[kids[kids.length - 1]].y;
+      pos[id] = { x, y: (first + last) / 2 };
+    } else {
+      pos[id] = { x, y: cursor };
+      cursor += NODE_H + ROW_GAP;
+    }
+  })(ROOT, 0);
+  return pos;
+}
+
+function elbow(x1, y1, x2, y2) {
+  const mx = x1 + COL_GAP / 2;
+  const dy = y2 - y1;
+  if (Math.abs(dy) < 1) return `M${x1},${y1} H${x2}`;
+  const r = Math.min(10, Math.abs(dy) / 2);
+  const d = Math.sign(dy);
+  return `M${x1},${y1} H${mx - r} Q${mx},${y1} ${mx},${y1 + d * r} V${y2 - d * r} Q${mx},${y2} ${mx + r},${y2} H${x2}`;
+}
+
+// ---------- render del árbol ----------
+function renderTree() {
+  const pos = layout();
+  state.pos = pos;
+  const q = state.query.trim();
+
+  world.querySelectorAll(".node").forEach((n) => n.remove());
+
+  let paths = "";
+  const fresh = new Set();
+  Object.keys(pos).forEach((id) => {
+    const d = DATA[id], p = pos[id], k = kind(id);
+    const isOpen = state.expanded.has(id);
+    const hasKids = d.children.length > 0;
+    const hit = q && matches(id, q);
+
+    const el = document.createElement("div");
+    el.className = ["node", k === "nav" ? "" : k, isOpen && hasKids ? "open" : "",
+      state.selected === id ? "selected" : "", q ? (hit ? "hit" : "dim") : "",
+      state.shown.has(id) ? "" : "enter"].filter(Boolean).join(" ");
+    el.style.left = p.x + "px";
+    el.style.top = p.y + "px";
+    el.dataset.id = id;
+    el.setAttribute("role", "treeitem");
+    el.setAttribute("aria-label", d.title);
+    if (hasKids) el.setAttribute("aria-expanded", isOpen);
+
+    let sub = d.nav ? "Nav primario" : "Fuera del nav";
+    if (hasKids) sub += ` · ${d.children.length} ${d.children.length === 1 ? "hija" : "hijas"}`;
+
+    el.innerHTML =
+      (id === KEY ? '<span class="key-flag">Diferenciador de marca</span>' : "") +
+      `<span class="ico">${iconFor(id)}</span>` +
+      `<div class="txt"><div class="t">${highlight(d.title, hit ? q : "")}</div><div class="s">${esc(sub)}</div></div>` +
+      (hasKids ? (isOpen ? `<span class="chev">${ICONS.chev}</span>` : `<span class="count">+${d.children.length}</span>`) : "");
+    world.appendChild(el);
+    fresh.add(id);
+
+    if (isOpen) {
+      d.children.forEach((c) => {
+        const cp = pos[c];
+        const cls = c === KEY ? "edge key" : (DATA[c].nav ? "edge" : "edge off");
+        paths += `<path class="${cls}" d="${elbow(p.x + NODE_W, p.y + NODE_H / 2, cp.x, cp.y + NODE_H / 2)}"/>`;
+      });
+    }
+  });
+  edgesSvg.innerHTML = paths;
+  state.shown = fresh;
+}
+
+// ---------- vista (pan / zoom) ----------
+function applyView() {
+  const { x, y, k } = state.view;
+  world.style.transform = `translate(${x}px, ${y}px) scale(${k})`;
+  canvas.style.backgroundSize = `${20 * k}px ${20 * k}px`;
+  canvas.style.backgroundPosition = `${x}px ${y}px`;
+  $("#zoomVal").textContent = Math.round(k * 100) + "%";
+}
+function clampK(k) { return Math.min(1.6, Math.max(0.3, k)); }
+function zoomAt(px, py, factor) {
+  const v = state.view, k2 = clampK(v.k * factor);
+  v.x = px - (px - v.x) * (k2 / v.k);
+  v.y = py - (py - v.y) * (k2 / v.k);
+  v.k = k2;
+  applyView();
+}
+function fit() {
+  const ids = Object.keys(state.pos);
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  ids.forEach((id) => {
+    const p = state.pos[id];
+    minX = Math.min(minX, p.x); minY = Math.min(minY, p.y - 14);
+    maxX = Math.max(maxX, p.x + NODE_W); maxY = Math.max(maxY, p.y + NODE_H);
+  });
+  const r = canvas.getBoundingClientRect();
+  const legend = document.querySelector(".legend").getBoundingClientRect();
+  const padTop = legend.bottom - r.top + 24, pad = 48, padBottom = 76;
+  const aw = r.width - pad * 2, ah = r.height - padTop - padBottom;
+  const k = clampK(Math.min(aw / (maxX - minX), ah / (maxY - minY), 1.15));
+  state.view = {
+    k,
+    x: pad + (aw - (maxX - minX) * k) / 2 - minX * k,
+    y: padTop + (ah - (maxY - minY) * k) / 2 - minY * k
+  };
+  applyView();
+}
+function screenPos(id) {
+  const p = state.pos[id], v = state.view;
+  return { x: v.x + p.x * v.k, y: v.y + p.y * v.k };
+}
+// Asegura que un nodo quede visible dentro del lienzo
+function reveal(id) {
+  const r = canvas.getBoundingClientRect();
+  const s = screenPos(id), v = state.view;
+  const w = NODE_W * v.k, h = NODE_H * v.k;
+  const m = 60;
+  if (s.x < m || s.x + w > r.width - m || s.y < 80 || s.y + h > r.height - 80) {
+    v.x += r.width / 2 - (s.x + w / 2);
+    v.y += r.height / 2 - (s.y + h / 2);
+    applyView();
+  }
+}
+
+// ---------- panel ----------
+function renderPanel() {
+  const id = state.selected, d = DATA[id], k = kind(id);
+  const crumbs = ancestors(id).map((a) => `<button data-go="${a}">${esc(DATA[a].title)}</button><span class="sep">/</span>`).join("");
+
+  const chips = [];
+  chips.push(d.nav ? '<span class="chip">Nav primario</span>' : '<span class="chip off">Fuera del nav</span>');
+  if (id === KEY) chips.push('<span class="chip key">Diferenciador de marca</span>');
+
+  const secciones = d.secciones.length
+    ? `<ol class="secciones">${d.secciones.map((s) => `<li>${esc(s)}</li>`).join("")}</ol>`
+    : `<div class="pending">${ICONS.info}<div><b>Pendiente.</b> El sitemap todavía no define secciones para esta página.</div></div>`;
+
+  const kids = d.children.length
+    ? `<div class="kids">${d.children.map((c) => {
+        const cd = DATA[c], ck = kind(c);
+        const meta = cd.children.length ? `${cd.children.length} ${cd.children.length === 1 ? "hija" : "hijas"}` : "";
+        return `<button class="kid ${ck === "nav" ? "" : ck}" data-go="${c}"><span class="dot"></span><span class="grow">${esc(cd.title)}</span>${meta ? `<span class="meta">${meta}</span>` : ""}${ICONS.arrow}</button>`;
+      }).join("")}</div>`
+    : `<p class="objetivo" style="color:var(--muted);font-size:14px">Sin páginas hijas.</p>`;
+
+  $("#panelBody").innerHTML = `
+    <nav class="crumbs">${crumbs}<span class="here">${esc(d.title)}</span></nav>
+    <div class="head-card ${k === "nav" ? "" : k}">
+      <span class="ico">${iconFor(id)}</span>
+      <div>
+        <h2>${esc(d.title)}</h2>
+        <div class="chips">${chips.join("")}</div>
+      </div>
+    </div>
+    <div class="block">
+      <h3 class="label">Objetivo / enfoque</h3>
+      <p class="objetivo">${esc(d.objetivo)}</p>
+    </div>
+    <div class="block">
+      <h3 class="label">Secciones <span class="n">${d.secciones.length || ""}</span></h3>
+      ${secciones}
+    </div>
+    <div class="block">
+      <h3 class="label">Páginas hijas <span class="n">${d.children.length || ""}</span></h3>
+      ${kids}
+    </div>
+    <div class="meta-line">id: ${esc(id)}${d.parent ? " · parent: " + esc(d.parent) : ""}</div>`;
+  $("#panelBody").scrollTop = 0;
+}
+
+// ---------- acciones ----------
+// Mantiene el nodo de referencia fijo en pantalla tras re-layout
+function relayoutKeeping(anchorId) {
+  const before = state.pos[anchorId] ? screenPos(anchorId) : null;
+  renderTree();
+  if (before && state.pos[anchorId]) {
+    const after = screenPos(anchorId);
+    state.view.x += before.x - after.x;
+    state.view.y += before.y - after.y;
+    applyView();
+  }
+}
+
+function select(id, { toggle = false, focus = false } = {}) {
+  const wasVisible = !!state.pos[id];
+  ancestors(id).forEach((a) => state.expanded.add(a));
+  if (toggle && DATA[id].children.length) {
+    if (state.expanded.has(id)) {
+      // colapsar también los descendientes
+      (function rm(n) { state.expanded.delete(n); DATA[n].children.forEach(rm); })(id);
+    } else {
+      state.expanded.add(id);
+    }
+  }
+  state.selected = id;
+  if (wasVisible) relayoutKeeping(id); else renderTree();
+  if (focus || !wasVisible) reveal(id);
+  renderPanel();
+  $("#panel").classList.add("open");
+}
+
+// Click en nodo: selecciona y expande/colapsa
+let drag = null;
+world.addEventListener("click", (e) => {
+  if (drag && drag.moved) return;
+  const n = e.target.closest(".node");
+  if (n) select(n.dataset.id, { toggle: true });
+});
+
+$("#panelBody").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-go]");
+  if (b) select(b.dataset.go, { focus: true });
+});
+$("#closePanel").addEventListener("click", () => $("#panel").classList.remove("open"));
+
+$("#expandAll").addEventListener("click", () => {
+  Object.keys(DATA).forEach((id) => { if (DATA[id].children.length) state.expanded.add(id); });
+  renderTree(); fit();
+});
+$("#collapseAll").addEventListener("click", () => {
+  state.expanded = new Set([ROOT]);
+  if (!state.pos[state.selected] || ancestors(state.selected).length > 1) state.selected = ROOT;
+  renderTree(); fit(); renderPanel();
+});
+$("#zoomIn").addEventListener("click", () => { const r = canvas.getBoundingClientRect(); zoomAt(r.width / 2, r.height / 2, 1.2); });
+$("#zoomOut").addEventListener("click", () => { const r = canvas.getBoundingClientRect(); zoomAt(r.width / 2, r.height / 2, 1 / 1.2); });
+$("#fit").addEventListener("click", fit);
+
+// Pan con arrastre, scroll con rueda/trackpad, zoom con ctrl/cmd + rueda o pinch
+canvas.addEventListener("pointerdown", (e) => {
+  if (e.button !== 0 || e.target.closest(".toolbar, .legend")) return;
+  drag = { sx: e.clientX, sy: e.clientY, vx: state.view.x, vy: state.view.y, moved: false, id: e.pointerId };
+});
+window.addEventListener("pointermove", (e) => {
+  if (!drag) return;
+  const dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+  if (!drag.moved && Math.hypot(dx, dy) > 4) {
+    drag.moved = true;
+    canvas.classList.add("dragging");
+  }
+  if (drag.moved) {
+    state.view.x = drag.vx + dx;
+    state.view.y = drag.vy + dy;
+    applyView();
+  }
+});
+window.addEventListener("pointerup", () => {
+  if (!drag) return;
+  canvas.classList.remove("dragging");
+  const d = drag;
+  setTimeout(() => { if (drag === d) drag = null; }, 0);
+});
+canvas.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const r = canvas.getBoundingClientRect();
+  if (e.ctrlKey || e.metaKey) {
+    zoomAt(e.clientX - r.left, e.clientY - r.top, Math.exp(-e.deltaY * 0.01));
+  } else {
+    state.view.x -= e.deltaX;
+    state.view.y -= e.deltaY;
+    applyView();
+  }
+}, { passive: false });
+
+// ---------- buscador ----------
+const q = $("#q"), results = $("#results");
+let activeIdx = 0, currentHits = [];
+
+function renderResults() {
+  const term = q.value.trim();
+  state.query = term;
+  renderTree();
+  if (!term) { results.classList.remove("open"); return; }
+  currentHits = Object.keys(DATA).filter((id) => matches(id, term));
+  activeIdx = 0;
+  results.innerHTML = currentHits.length
+    ? currentHits.map((id, i) => {
+        const path = ancestors(id).map((a) => DATA[a].title).join(" / ") || "Raíz del sitio";
+        return `<button role="option" data-id="${id}" class="${i === 0 ? "active" : ""}"><div class="r-title">${highlight(DATA[id].title, term)}</div><div class="r-path">${esc(path)}${DATA[id].nav ? "" : " · fuera del nav"}</div></button>`;
+      }).join("")
+    : `<div class="empty">Ninguna página coincide con “${esc(term)}”.</div>`;
+  results.classList.add("open");
+}
+function pick(id) {
+  results.classList.remove("open");
+  q.value = "";
+  state.query = "";
+  q.blur();
+  select(id, { focus: true });
+}
+q.addEventListener("input", renderResults);
+q.addEventListener("focus", () => { if (q.value.trim()) renderResults(); });
+q.addEventListener("keydown", (e) => {
+  const btns = results.querySelectorAll("button");
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+    e.preventDefault();
+    if (!btns.length) return;
+    activeIdx = (activeIdx + (e.key === "ArrowDown" ? 1 : -1) + btns.length) % btns.length;
+    btns.forEach((b, i) => b.classList.toggle("active", i === activeIdx));
+    btns[activeIdx].scrollIntoView({ block: "nearest" });
+  } else if (e.key === "Enter") {
+    if (currentHits[activeIdx]) pick(currentHits[activeIdx]);
+  } else if (e.key === "Escape") {
+    q.value = ""; renderResults(); q.blur();
+  }
+});
+results.addEventListener("mousedown", (e) => {
+  const b = e.target.closest("button[data-id]");
+  if (b) { e.preventDefault(); pick(b.dataset.id); }
+});
+document.addEventListener("mousedown", (e) => {
+  if (!e.target.closest(".search")) results.classList.remove("open");
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "/" && document.activeElement !== q) { e.preventDefault(); q.focus(); q.select(); }
+});
+
+// ---------- arranque ----------
+(function init() {
+  const ids = Object.keys(DATA);
+  const nav = ids.filter((id) => DATA[id].nav).length;
+  $("#summary").textContent = `${ids.length} páginas · ${nav} en nav primario · ${ids.length - nav} fuera del nav · click en una página para expandirla y ver su detalle`;
+  $("#lg-nav").textContent = nav;
+  $("#lg-off").textContent = ids.length - nav;
+  renderTree();
+  fit();
+  renderPanel();
+  if (window.matchMedia("(max-width: 900px)").matches) $("#panel").classList.remove("open");
+  let t;
+  window.addEventListener("resize", () => { clearTimeout(t); t = setTimeout(fit, 120); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+import type { Schema } from "../schema";
+import { cases } from "./cases";
+import { clients } from "./clients";
+import { common } from "./common";
+import { cta } from "./cta";
+import { footer } from "./footer";
+import { hero } from "./hero";
+import { meta } from "./meta";
+import { nav } from "./nav";
+import { notFound } from "./not-found";
+import { research } from "./research";
+import { solutions } from "./solutions";
+import { appliedAi } from "./applied-ai";
+import { solutionsPage } from "./solutions-page";
+import { services } from "./services";
+import { software } from "./software";
+import { cloud } from "./cloud";
+import { ai } from "./ai";
+import { engagement } from "./engagement";
+import { resources } from "./resources";
+import { contact } from "./contact";
+import { industries } from "./industries";
+import { landings } from "./landings";
+import { details } from "./details";
+import { legal } from "./legal";
+
+export const copy: Schema = { meta, common, nav, footer, hero, clients, research, solutions, cases, cta, notFound, appliedAi, solutionsPage, services, software, cloud, ai, engagement, resources, contact, industries, landings, details, legal };
