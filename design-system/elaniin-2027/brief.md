@@ -50,11 +50,23 @@ El color sí diverge. La mitad del board usa acentos saturados (verde lima, nara
 ### Encabezado fijo con lista
 - El encabezado de la sección va a la izquierda y la lista de puntos a la derecha, en filas sobre hairlines. ([Miros](https://www.temlis.com/templates/miros?utm_source=organic&utm_medium=pinterest), [Portfolio templates](https://www.sitebuilderreport.com/graphic-design-portfolio-website-templates))
 
+### Migración por etapas (modernización de aplicaciones)
+- Unos paneles modulares oscuros, con módulos en celdas y cables que los conectan, sirven para leer el sistema como piezas que se pueden mover. ([Signal conditioning panel](https://cdn.hackaday.io/images/7532141613419965867.png), ["Modular Project", Neubad](https://www.typographicposters.com/posters/neubad/612e5ca699e345e9d7fc9db3))
+- La pastilla segmentada para cambiar de estado. (source: images/1115063189023266764.jpg)
+### Teléfono que sigue a la función elegida (apps móviles)
+- El teléfono va al centro, con bloques de texto alrededor que explican cada parte. ([Slava Kornilov, Material iOS](https://www.behance.net/gallery/235351303/Professional-logo-Ideas/?slava-kornilov), [AI OS](https://d2w9rnfcy7mm78.cloudfront.net/38417196/original_ae22beb2df0474665f40ea77a1884c56.jpg))
+- La pantalla de inicio lleva una cifra grande y accesos redondos. ([Task Manager App UI](https://www.behance.net/gallery/251354727/Seamless-Product-Interfaces/?task-manager-app-ui-concept))
+### Panel de soporte con lecturas (soporte y evolución)
+- El contador va en mono gigante (hh:mm:ss), con una fila de métricas clave debajo. ([Setio](https://www.norgram.co/work/setio))
+- Las tarjetas de lectura llevan etiqueta, valor grande e indicador. (source: images/1115063189023240927.jpg)
+- El progreso se muestra como una barra de segmentos verticales. (source: images/1115063189023236538.jpg)
+
 ## States
 - La evidencia es escasa: los pins son estáticos. Solo se ve el estado activo de una columna (más ancha). ([Metrium](https://dribbble.com/shots/19133524-Metrium-Landing-Page-UI))
 - Hay loaders (círculo, puntos, reloj), pero de UI de app, no de sitio web. (source: images/1115063189023241063.jpg)
 
 ## Motion & micro-interactions
+- Sin confirmar, conviene revisar la fuente: la descripción del pin de Slava Kornilov menciona "#Hover_Effect_Web_Design #Motion"; el cambio de pantallas con deslizamiento es una lectura propia.
 - Sin confirmar, conviene revisar la fuente: el pulso que recorre la línea del flujo es una lectura propia del diagrama de PlayerZero, porque el pin es una imagen fija.
 - Sin confirmar, conviene revisar la fuente: la expansión de columnas al hacer hover se deduce del layout de Metrium, porque el pin es una imagen fija.
 - La descripción del pin de PlayerZero menciona "testimonials, grid layouts" y no habla de movimiento.

@@ -37,6 +37,53 @@ export type ServicePageCopy = {
   highlight?: SectionHead & { link?: string };
   /** Client names from the site map; absent when the site map names none. */
   proof?: string[];
+  /** Interactive showcases, one per service at most (sample content, nothing real). */
+  stages?: StagesCopy;
+  phone?: PhoneCopy;
+  panel?: PanelCopy;
+};
+
+/* App modernization: modules moving from the current system to the new one, stage by stage. */
+export type StagesCopy = SectionHead & {
+  /** Stage names, from today to the target (4). */
+  steps: [string, string, string, string];
+  stepsLabel: string;
+  current: string;
+  next: string;
+  bridge: string;
+  /** Module names (6), in the order they move. */
+  modules: [string, string, string, string, string, string];
+  online: string;
+  /** "{n} de {total} módulos en el sistema nuevo" */
+  migrated: string;
+  retired: string;
+  play: string;
+  pause: string;
+};
+
+/* Mobile apps: a phone whose screen follows the selected feature. */
+export type PhoneCopy = SectionHead & {
+  featuresLabel: string;
+  features: [Point, Point, Point];
+  home: { greeting: string; balanceLabel: string; actions: [string, string, string]; recent: string; items: [string, string, string] };
+  pay: { title: string; to: string; contacts: [string, string, string]; amountLabel: string; confirm: string };
+  alerts: { title: string; items: [Point, Point, Point]; now: string };
+  note: string;
+};
+
+/* Software support: a sample support panel with the response clock of the selected priority. */
+export type PanelCopy = SectionHead & {
+  prioritiesLabel: string;
+  /** Priority name and its sample response time in minutes. */
+  priorities: [{ name: string; minutes: number }, { name: string; minutes: number }, { name: string; minutes: number }];
+  clockLabel: string;
+  elapsed: string;
+  metrics: [string, string, string];
+  uptimeLabel: string;
+  feedLabel: string;
+  tickets: [string, string, string, string];
+  states: [string, string, string];
+  note: string;
 };
 
 /* Labels shared by every service line page. */

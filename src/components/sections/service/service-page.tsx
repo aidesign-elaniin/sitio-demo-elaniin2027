@@ -11,8 +11,11 @@ import type { LucideIcon } from "lucide-react";
 import { BuildFlow } from "./build-flow";
 import { FeatureGrid } from "./feature-grid";
 import { Highlight } from "./highlight";
+import { MigrationStages } from "./migration-stages";
 import { Models } from "./models";
+import { PhoneShowcase } from "./phone-showcase";
 import { ProblemList } from "./problem-list";
+import { SupportPanel } from "./support-panel";
 import { ProofStrip } from "./proof-strip";
 
 /*
@@ -59,6 +62,9 @@ export async function ServicePageView({
             tone="subtle"
           />
         )}
+        {copy.stages && <MigrationStages copy={copy.stages} />}
+        {copy.phone && <PhoneShowcase copy={copy.phone} lang={lang} />}
+        {copy.panel && <SupportPanel copy={copy.panel} lang={lang} />}
         {copy.highlight && (
           <Highlight
             title={copy.highlight.title}
