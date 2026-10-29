@@ -294,6 +294,8 @@ export type NavCopy = {
     heading: string;
     items: Record<"staffAugmentation" | "dedicatedTeams" | "projectDelivery", TitleDesc>;
     help: { question: string; action: string };
+    /** Legend of the team compositions and ends of the "who leads" scale. */
+    scale: { yours: string; ours: string };
   };
   resources: {
     trigger: string;

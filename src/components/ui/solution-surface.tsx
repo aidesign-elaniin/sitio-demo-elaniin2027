@@ -108,3 +108,14 @@ export function SolutionSurface({ look }: { look: Look }) {
     </>
   );
 }
+
+/*
+  Lighter variant for the engagement and resources menus: only the software look keeps its texture (module grid and
+  glow); the AI look keeps its blue glow as a gradient without the grid; the cloud look stays a flat Inspire Grey.
+*/
+export function MenuSurface({ id }: { id: SolutionId }) {
+  if (id === "software") return <SolutionSurface look={LOOKS.software} />;
+  if (id === "ai")
+    return <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10" style={{ background: LOOKS.ai.glow }} />;
+  return null;
+}

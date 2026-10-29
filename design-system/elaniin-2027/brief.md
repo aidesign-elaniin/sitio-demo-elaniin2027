@@ -61,11 +61,17 @@ El color sí diverge. La mitad del board usa acentos saturados (verde lima, nara
 - Las tarjetas de lectura llevan etiqueta, valor grande e indicador. (source: images/1115063189023240927.jpg)
 - El progreso se muestra como una barra de segmentos verticales. (source: images/1115063189023236538.jpg)
 
+### Menús del nav: modelos y recursos
+- Las matrices de puntos, cada punto un "miembro", pintan la composición de cada equipo (gris para tu gente, oscuro para la de Elaniin). ([CyberMind](https://www.behance.net/gallery/237381611/CyberMind?utm_source=pinterest&utm_medium=pin&utm_campaign=cybermind_branding), (source: images/1115063189023266945.jpg))
+- Las tarjetas en abanico sobre un fondo oscuro sirven para los casos destacados. ([Rise](https://www.behance.net/gallery/249562325/Rise-Branding-Web-Design))
+- Un índice de links con número en mono y flecha ↗ ordena los artículos. ([Kus footer](https://www.footer.design/sites/kus))
+
 ## States
 - La evidencia es escasa: los pins son estáticos. Solo se ve el estado activo de una columna (más ancha). ([Metrium](https://dribbble.com/shots/19133524-Metrium-Landing-Page-UI))
 - Hay loaders (círculo, puntos, reloj), pero de UI de app, no de sitio web. (source: images/1115063189023241063.jpg)
 
 ## Motion & micro-interactions
+- Sin confirmar, conviene revisar la fuente: el abanico que se abre al pasar el mouse y el mazo que reparte cartas son una lectura propia del pin de Rise, porque es una imagen fija.
 - Sin confirmar, conviene revisar la fuente: la descripción del pin de Slava Kornilov menciona "#Hover_Effect_Web_Design #Motion"; el cambio de pantallas con deslizamiento es una lectura propia.
 - Sin confirmar, conviene revisar la fuente: el pulso que recorre la línea del flujo es una lectura propia del diagrama de PlayerZero, porque el pin es una imagen fija.
 - Sin confirmar, conviene revisar la fuente: la expansión de columnas al hacer hover se deduce del layout de Metrium, porque el pin es una imagen fija.

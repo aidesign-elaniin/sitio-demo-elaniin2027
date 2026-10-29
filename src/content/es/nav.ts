@@ -44,6 +44,7 @@ export const nav: NavCopy = {
       question: "¿No sabes qué modelo te conviene?",
       action: "Comparar modelos",
     },
+    scale: { yours: "Tu equipo", ours: "Elaniin" },
   },
   resources: {
     trigger: "Recursos",
