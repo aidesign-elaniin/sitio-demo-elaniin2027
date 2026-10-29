@@ -72,4 +72,38 @@ export const appliedAi: AppliedAiCopy = {
       },
     },
   },
+  loop: {
+    title: "See the method at work.",
+    lead: {
+      strong: "AI proposes. A person decides.",
+      rest: "Pick a task, let the AI write the draft and approve it or ask for a change, the way the team does in every delivery.",
+    },
+    tasksLabel: "Task",
+    tasks: [
+      {
+        label: "Payment tests",
+        draft: "Test the payment with a valid card, an expired card and insufficient funds; check the error message and that nothing is charged twice.",
+        revised: "Test the payment with a valid, expired and empty card and with the network down; check the error message, the retry and that nothing is charged twice.",
+      },
+      {
+        label: "Document the API",
+        draft: "Orders endpoint: create, read and cancel. Needs a token. Returns 201 on create and 404 when the order does not exist.",
+        revised: "Orders endpoint: create, read and cancel. Needs a token with write access. Returns 201 on create, 404 when missing and 409 when already cancelled.",
+      },
+      {
+        label: "Migration plan",
+        draft: "Move reports first, then users and payments last, with the old system on until each stage is validated.",
+        revised: "Move reports and users first, then payments in low-traffic hours, with the old system on and a rollback plan per stage.",
+      },
+    ],
+    lanes: { ai: "AI proposes", review: "A person reviews", done: "It ships" },
+    states: { drafting: "Writing…", waiting: "Waiting for review", revising: "Adjusting to your comment…", approved: "Approved" },
+    approve: "Approve",
+    change: "Ask for a change",
+    reviewer: "Reviewer: Ana, QA",
+    delivered: "Shipped: {n}",
+    empty: "Approved work lands here.",
+    note: "Demo with sample content. No suggestion reaches production without a person.",
+  },
+  capacity: { one: "One team", many: "The same team with AI" },
 };

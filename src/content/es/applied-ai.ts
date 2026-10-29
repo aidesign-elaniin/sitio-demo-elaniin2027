@@ -72,4 +72,38 @@ export const appliedAi: AppliedAiCopy = {
       },
     },
   },
+  loop: {
+    title: "Mira el método en acción.",
+    lead: {
+      strong: "La IA propone. Una persona decide.",
+      rest: "Elige una tarea, deja que la IA escriba el borrador y apruébalo o pide un cambio, como lo hace el equipo en cada entrega.",
+    },
+    tasksLabel: "Tarea",
+    tasks: [
+      {
+        label: "Pruebas del pago",
+        draft: "Probar el pago con tarjeta válida, tarjeta vencida y saldo insuficiente; validar el mensaje de error y que no se cobre dos veces.",
+        revised: "Probar el pago con tarjeta válida, vencida, sin saldo y con red caída; validar el mensaje de error, el reintento y que no se cobre dos veces.",
+      },
+      {
+        label: "Documentar la API",
+        draft: "Endpoint de pedidos: crea, consulta y cancela. Requiere token. Responde 201 al crear y 404 si el pedido no existe.",
+        revised: "Endpoint de pedidos: crea, consulta y cancela. Requiere token con permiso de escritura. Responde 201 al crear, 404 si no existe y 409 si ya se canceló.",
+      },
+      {
+        label: "Plan de migración",
+        draft: "Mover primero reportes, luego usuarios y al final pagos, con el sistema viejo encendido hasta validar cada etapa.",
+        revised: "Mover primero reportes y usuarios, luego pagos en horario de baja demanda, con el sistema viejo encendido y un plan de vuelta atrás por etapa.",
+      },
+    ],
+    lanes: { ai: "La IA propone", review: "Una persona revisa", done: "Se entrega" },
+    states: { drafting: "Escribiendo…", waiting: "Esperando revisión", revising: "Ajustando según tu comentario…", approved: "Aprobado" },
+    approve: "Aprobar",
+    change: "Pedir un cambio",
+    reviewer: "Revisa: Ana, QA",
+    delivered: "Entregados: {n}",
+    empty: "Lo aprobado llega aquí.",
+    note: "Demostración con contenido de ejemplo. Ninguna sugerencia llega a producción sin una persona.",
+  },
+  capacity: { one: "Un equipo", many: "El mismo equipo con IA" },
 };

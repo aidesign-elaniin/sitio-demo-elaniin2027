@@ -66,11 +66,17 @@ El color sí diverge. La mitad del board usa acentos saturados (verde lima, nara
 - Las tarjetas en abanico sobre un fondo oscuro sirven para los casos destacados. ([Rise](https://www.behance.net/gallery/249562325/Rise-Branding-Web-Design))
 - Un índice de links con número en mono y flecha ↗ ordena los artículos. ([Kus footer](https://www.footer.design/sites/kus))
 
+### Applied AI, la página más expresiva
+- Las ondas de puntos generativas, los blobs en semitono y la esfera de puntos sirven para el hero: un campo de módulos que "respira" como un modelo pensando. ([Diseño generativo](images/1115063189023266899.jpg), (source: images/1115063189023266880.jpg), [CyberMind](https://www.behance.net/gallery/237381611/CyberMind?utm_source=pinterest&utm_medium=pin&utm_campaign=cybermind_branding))
+- Los bloques que resaltan palabras en la tipografía sirven para marcar "Applied AI" como un token seleccionado y para los tokens que la IA va escribiendo. (source: images/1115063189023267071.jpg, images/1115063189023266928.jpg)
+- El semitono de Form Follows Function y los retratos en matriz de puntos sirven para la capacidad 100x, dibujada como una grilla de módulos. ([fffunction](https://fffunction.studio/), (source: images/1115063189023236616.jpg))
+
 ## States
 - La evidencia es escasa: los pins son estáticos. Solo se ve el estado activo de una columna (más ancha). ([Metrium](https://dribbble.com/shots/19133524-Metrium-Landing-Page-UI))
 - Hay loaders (círculo, puntos, reloj), pero de UI de app, no de sitio web. (source: images/1115063189023241063.jpg)
 
 ## Motion & micro-interactions
+- Sin confirmar, conviene revisar la fuente: la descripción del pin generativo menciona #touchdesigner, o sea que el original es una animación; el movimiento del campo es una lectura propia.
 - Sin confirmar, conviene revisar la fuente: el abanico que se abre al pasar el mouse y el mazo que reparte cartas son una lectura propia del pin de Rise, porque es una imagen fija.
 - Sin confirmar, conviene revisar la fuente: la descripción del pin de Slava Kornilov menciona "#Hover_Effect_Web_Design #Motion"; el cambio de pantallas con deslizamiento es una lectura propia.
 - Sin confirmar, conviene revisar la fuente: el pulso que recorre la línea del flujo es una lectura propia del diagrama de PlayerZero, porque el pin es una imagen fija.

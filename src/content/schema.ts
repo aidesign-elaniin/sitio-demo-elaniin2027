@@ -259,7 +259,25 @@ export type AppliedAiCopy = {
     all: string;
     items: Record<"deltaForce" | "atlasBuilder", { tag: string; title: string; text: string }>;
   };
+  /** Interactive demo of the method: the AI drafts, a person approves or asks for a change (sample content). */
+  loop: SectionHead & {
+    tasksLabel: string;
+    tasks: [LoopTask, LoopTask, LoopTask];
+    lanes: { ai: string; review: string; done: string };
+    states: { drafting: string; waiting: string; revising: string; approved: string };
+    approve: string;
+    change: string;
+    reviewer: string;
+    /** "Entregados: {n}" */
+    delivered: string;
+    empty: string;
+    note: string;
+  };
+  /** The capacity pillar's picture: one team, then the same team with AI. */
+  capacity: { one: string; many: string };
 };
+
+type LoopTask = { label: string; draft: string; revised: string };
 
 /* Strings shared by several sections. */
 export type CommonCopy = {

@@ -282,6 +282,19 @@
   @media (prefers-reduced-motion: reduce) { display: none; }
 }
 
+/*
+  Caret (Applied AI hero): a block cursor that blinks after the headline, as if the model were still writing.
+  Steps, not a fade. Solid under prefers-reduced-motion.
+*/
+@keyframes caret-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+@utility caret-blink {
+  animation: caret-blink 1.1s steps(1, end) infinite;
+  @media (prefers-reduced-motion: reduce) { animation: none; }
+}
+
 /* Edge masks for the glow: strongest at the bottom right, fading out toward the top and the left (where the text is). */
 @utility mask-glow {
   mask-image:
