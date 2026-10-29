@@ -75,26 +75,27 @@ function ResearchPreview() {
 }
 
 /*
-  Resources mega menu (references: the Kus mono index with arrows, the fanned card carousel and the dot-matrix
-  readouts of the board, design-system/elaniin-2027/brief.md).
+  Resources mega menu (references: the Kus mono index with arrows and the dot-matrix readouts of the board,
+  design-system/elaniin-2027/brief.md).
   - Explore: two tiles with a live preview of what is behind them (a product window, the research figure in dots).
   - Latest articles: an editorial index, numbered rows on hairlines with an arrow that turns on hover.
-  - Featured cases: the AI solution background (Excellence Blue with its glow); the three cases are a fanned deck that deals the
-    next card to the front while the menu is open (the living loop) and spreads out on hover. Every card opens its case.
-  The three columns take the solution backgrounds (only the software one keeps its texture, the AI one its glow) (explore: software, articles: cloud, featured: AI), so every mega menu
-  shares the same surfaces. Transitions only, and the deck rests under reduced motion.
+  - Featured cases: the AI solution background (Excellence Blue with its glow); the three cases are a staircase of
+    compact cards, all readable; while the menu is open one comes forward at a time (the living loop) and hovering or
+    focusing a card brings it forward and pauses the loop. Every card opens its case.
+  Backgrounds come from the solution looks (explore: software with its texture, articles: flat cloud grey, featured:
+  AI with its glow). Transitions only, and the loop rests under reduced motion.
 */
 export function ResourcesMenu({ lang, copy, onNavigate }: { lang: Lang; copy: NavCopy; onNavigate?: () => void }) {
   const { explore, latest, featured } = copy.resources;
   const reduce = !!useReducedMotion();
   const [front, setFront] = useState(0);
-  const [spread, setSpread] = useState(false);
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
-    if (reduce || spread) return;
+    if (reduce || paused) return;
     const id = setInterval(() => setFront((f) => (f + 1) % featured.cards.length), CYCLE_MS);
     return () => clearInterval(id);
-  }, [reduce, spread, featured.cards.length]);
+  }, [reduce, paused, featured.cards.length]);
 
   return (
     <div className="grid grid-cols-2 gap-2 p-2 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.1fr)]">
@@ -159,15 +160,15 @@ export function ResourcesMenu({ lang, copy, onNavigate }: { lang: Lang; copy: Na
         </ol>
       </section>
 
-      {/* Featured cases: a dealt deck on the dark panel. */}
+      {/* Featured cases: three readable cards on the dark panel. */}
       <section className="hidden xl:block" aria-label={featured.heading}>
         <div
           className={cn("relative isolate flex h-full min-h-[26rem] flex-col overflow-hidden rounded-card", LOOKS.ai.card)}
-          onMouseEnter={() => setSpread(true)}
-          onMouseLeave={() => setSpread(false)}
-          onFocus={() => setSpread(true)}
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+          onFocus={() => setPaused(true)}
           onBlur={(e) => {
-            if (!e.currentTarget.contains(e.relatedTarget)) setSpread(false);
+            if (!e.currentTarget.contains(e.relatedTarget)) setPaused(false);
           }}
         >
 
@@ -188,34 +189,36 @@ export function ResourcesMenu({ lang, copy, onNavigate }: { lang: Lang; copy: Na
             <span className="text-body-sm text-text-on-dark-secondary">{featured.subtitle}</span>
           </Link>
 
-          <ul className="relative mt-auto h-64">
+          {/* A staircase of the three cases, all readable; the loop brings one forward at a time, hover picks it. */}
+          <ul className="mt-auto flex flex-col gap-2 p-6 pt-8">
             {featured.cards.map((card, i) => {
-              // Position in the deck: 0 is the front card, 2 the back one.
-              const depth = (i - front + featured.cards.length) % featured.cards.length;
-              // Spread: a hand of cards, the outer ones lower and turned out. At rest: a deck centered on the panel.
-              const fan = spread
-                ? `translate(${(i - 1) * 26}%, ${Math.abs(i - 1) * 14}px) rotate(${(i - 1) * 7}deg)`
-                : `translate(${(depth - 1) * 12}px, ${depth * -14}px) rotate(${(depth - 1) * 3}deg) scale(${1 - depth * 0.05})`;
+              const on = front === i;
               return (
-                <li
-                  key={card.title}
-                  className="absolute bottom-12 left-1/2 w-56 -translate-x-1/2"
-                  style={{ zIndex: spread ? 10 - Math.abs(i - 1) : 10 - depth }}
-                >
+                <li key={card.title} style={{ marginLeft: `${i * 12}px`, marginRight: `${(2 - i) * 12}px` }}>
                   <Link
                     href={href(FEATURED_ROUTES[i], lang)}
                     onClick={onNavigate}
-                    style={{ transform: fan }}
+                    onMouseEnter={() => setFront(i)}
+                    onFocus={() => setFront(i)}
                     className={cn(
-                      "block rounded-menu border border-border-default bg-white p-4 shadow-product transition-[transform,opacity] duration-500 ease-emphasized focus-ring-on-dark motion-reduce:transition-none",
-                      !spread && depth > 0 && "opacity-90",
+                      "flex items-center justify-between gap-3 rounded-menu border bg-white px-4 py-3 transition-[transform,opacity,box-shadow,border-color] duration-500 ease-emphasized focus-ring-on-dark motion-reduce:transition-none",
+                      on ? "-translate-y-0.5 border-white opacity-100 shadow-product" : "border-transparent opacity-75",
                     )}
                   >
-                    <span className="inline-flex h-6 items-center rounded-tag border border-neutral-border bg-surface-subtle px-2 mono-label text-caption leading-none text-text-secondary">
-                      {card.tag}
+                    <span className="flex min-w-0 flex-col gap-1.5">
+                      <span className="inline-flex h-5 w-fit items-center rounded-tag border border-neutral-border bg-surface-subtle px-1.5 mono-label text-caption leading-none text-text-secondary">
+                        {card.tag}
+                      </span>
+                      <span className="truncate font-display text-body font-medium text-text-primary">{card.title}</span>
                     </span>
-                    <span className="mt-3 block font-display text-body-lg font-medium text-text-primary">{card.title}</span>
-                    <span className="mt-1 block font-text text-body-sm text-text-secondary tabular-nums">{card.metric}</span>
+                    <span
+                      className={cn(
+                        "shrink-0 text-right font-mono text-caption tabular-nums transition-colors duration-300",
+                        on ? "text-text-primary" : "text-text-muted",
+                      )}
+                    >
+                      {card.metric.split(" ")[0]}
+                    </span>
                   </Link>
                 </li>
               );
