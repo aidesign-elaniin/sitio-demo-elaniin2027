@@ -3,7 +3,7 @@ import { ContactForm } from "@/components/sections/contact/contact-form";
 import { Footer } from "@/components/sections/footer/footer";
 import { ModuleField } from "@/components/sections/hero/module-field";
 import { Nav } from "@/components/sections/nav/nav";
-import { FeatureGrid } from "@/components/sections/service/feature-grid";
+import { ProcessSteps } from "@/components/sections/contact/process-steps";
 import { getCopy, getLang } from "@/content";
 import { buildMetadata } from "@/lib/metadata";
 
@@ -50,7 +50,7 @@ export default async function ContactUs() {
             </div>
           </div>
         </section>
-        <FeatureGrid id="next-title" title={copy.next.title} lead={copy.next.lead} items={copy.next.steps} tone="subtle" />
+        <ProcessSteps id="next-title" title={copy.next.title} lead={copy.next.lead} steps={copy.next.steps} />
       </main>
       <Footer route="contact" />
     </>

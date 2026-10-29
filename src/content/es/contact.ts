@@ -42,9 +42,9 @@ export const contact: ContactCopy = {
     title: "Qué pasa después.",
     lead: { strong: "Tres pasos, sin sorpresas.", rest: "Antes de proponer nada, entendemos el problema." },
     steps: [
-      { title: "1. Te respondemos", text: "Una persona del equipo lee tu mensaje y te escribe para agendar." },
-      { title: "2. Llamada de 30 minutos", text: "Entendemos el problema, el contexto y lo que ya intentaste." },
-      { title: "3. Propuesta", text: "Te enviamos un camino concreto: servicio, modelo de contratación y siguientes pasos." },
+      { title: "Te respondemos", text: "Una persona del equipo lee tu mensaje y te escribe para agendar." },
+      { title: "Llamada de 30 minutos", text: "Entendemos el problema, el contexto y lo que ya intentaste." },
+      { title: "Propuesta", text: "Te enviamos un camino concreto: servicio, modelo de contratación y siguientes pasos." },
     ],
   },
 };

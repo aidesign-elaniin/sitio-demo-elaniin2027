@@ -42,9 +42,9 @@ export const contact: ContactCopy = {
     title: "What happens next.",
     lead: { strong: "Three steps, no surprises.", rest: "Before proposing anything, we understand the problem." },
     steps: [
-      { title: "1. We reply", text: "A person on the team reads your message and writes back to book a time." },
-      { title: "2. A 30-minute call", text: "We understand the problem, the context and what you have already tried." },
-      { title: "3. Proposal", text: "We send you a concrete path: service, engagement model and next steps." },
+      { title: "We reply", text: "A person on the team reads your message and writes back to book a time." },
+      { title: "A 30-minute call", text: "We understand the problem, the context and what you have already tried." },
+      { title: "Proposal", text: "We send you a concrete path: service, engagement model and next steps." },
     ],
   },
 };

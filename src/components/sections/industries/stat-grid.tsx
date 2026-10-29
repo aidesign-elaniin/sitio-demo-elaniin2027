@@ -1,9 +1,12 @@
 import { CountUp } from "@/components/ui/count-up";
 import { Reveal } from "@/components/ui/reveal";
-import { SectionHead } from "@/components/ui/section-head";
 import type { Lang } from "@/lib/i18n";
 
-/* Figures in the hairline grid: a large number that counts up once on screen, and its label. White section. */
+/*
+  Figures band (reference: Miros "by the stats" and Metrium's figure row, design-system/elaniin-2027/brief.md): an
+  Excellence Blue band, header on the left, then one row of cells split by hairlines. Each figure is display size with
+  its label beside it, not under it. The number counts up once on screen.
+*/
 export function StatGrid({
   id,
   title,
@@ -18,16 +21,27 @@ export function StatGrid({
   lang: Lang;
 }) {
   return (
-    <section aria-labelledby={id} className="bg-white pb-[var(--section-y)]">
-      <div className="container-site pt-[var(--section-y)] pb-12">
-        <SectionHead id={id} title={title} lead={lead} />
-      </div>
+    <section aria-labelledby={id} className="bg-surface-dark py-[var(--section-y)] text-text-on-dark">
       <div className="container-site">
-        <dl className="grid gap-px border border-border-default bg-border-default md:grid-cols-3">
+        <Reveal>
+          <h2 id={id} className="max-w-[20ch] font-display text-h1 font-medium text-balance">
+            {title}
+          </h2>
+          <p className="mt-6 max-w-[60ch] font-display text-lead">
+            <strong className="font-medium">{lead.strong}</strong>{" "}
+            <span className="text-text-on-dark-secondary">{lead.rest}</span>
+          </p>
+        </Reveal>
+
+        <dl className="mt-16 grid border-t border-border-on-dark md:grid-cols-3">
           {stats.map((stat, i) => (
-            <Reveal key={stat.label} delay={i * 0.06} className="flex min-w-0 flex-col-reverse gap-2 bg-white pad-card">
-              <dt className="text-body text-text-secondary">{stat.label}</dt>
-              <dd className="font-display text-display-lg font-medium text-text-primary tabular-nums">
+            <Reveal
+              key={stat.label}
+              delay={i * 0.06}
+              className="flex min-w-0 items-end gap-4 border-b border-border-on-dark py-8 md:border-b-0 md:px-8 md:first:pl-0 md:not-first:border-l"
+            >
+              <dt className="order-last max-w-[14ch] pb-2 text-body-sm text-text-on-dark-secondary">{stat.label}</dt>
+              <dd className="font-display text-display-xl font-medium tabular-nums">
                 <CountUp lang={lang} to={stat.value} />
               </dd>
             </Reveal>

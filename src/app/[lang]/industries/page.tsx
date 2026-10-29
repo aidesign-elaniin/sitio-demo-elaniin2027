@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import { Cta } from "@/components/sections/cta/cta";
 import { Footer } from "@/components/sections/footer/footer";
 import { HeroView } from "@/components/sections/hero/hero";
+import { IndustryColumns } from "@/components/sections/industries/industry-columns";
 import { industryIds } from "@/components/sections/industries/industry-data";
 import { StatGrid } from "@/components/sections/industries/stat-grid";
 import { Nav } from "@/components/sections/nav/nav";
 import { engagementItems } from "@/components/sections/nav/nav-data";
 import { ProofStrip } from "@/components/sections/service/proof-strip";
 import { lines } from "@/components/sections/service/registry";
-import { ServiceCards } from "@/components/sections/service/service-cards";
 import { getCopy, getLang } from "@/content";
 import { anchors } from "@/lib/anchors";
 import { buildMetadata } from "@/lib/metadata";
@@ -37,7 +37,7 @@ export default async function Industries() {
       <Nav route="industries" />
       <main id="main">
         <HeroView copy={hub.hero} href={href("industries", lang, anchors.contact)} />
-        <ServiceCards title={hub.intro.title} lead={hub.intro.lead} cards={cards} cardLink={common.cardLink} lang={lang} />
+        <IndustryColumns title={hub.intro.title} lead={hub.intro.lead} cards={cards} cardLink={common.cardLink} lang={lang} />
         <StatGrid id="stats-title" title={hub.stats.title} lead={hub.stats.lead} stats={stats} lang={lang} />
         <ProofStrip label={hub.certifications.label} names={hub.certifications.items} />
         <Cta />
