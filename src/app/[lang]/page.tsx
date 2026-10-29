@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { AudienceRoutes } from "@/components/sections/audience-routes/audience-routes";
 import { Cases } from "@/components/sections/cases/cases";
 import { Clients } from "@/components/sections/clients/clients";
 import { Cta } from "@/components/sections/cta/cta";
+import { Engagement } from "@/components/sections/engagement/engagement";
 import { Footer } from "@/components/sections/footer/footer";
 import { Hero } from "@/components/sections/hero/hero";
 import { Nav } from "@/components/sections/nav/nav";
@@ -15,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata(lang, "home", meta.home);
 }
 
-/* Sections get added here one by one. 01 Nav, 02 Hero, 03 Clients, 04 Cases, 05 Research, 06 Solutions, 07 CTA, 08 Footer. */
+/* The home, in order: Nav, Hero, Clients, Audience routes, Solutions, Engagement models, Cases, Research, CTA and Footer. */
 export default function Home() {
   return (
     <>
@@ -23,9 +25,11 @@ export default function Home() {
       <main id="main">
         <Hero />
         <Clients />
+        <AudienceRoutes />
+        <Solutions />
+        <Engagement />
         <Cases />
         <Research />
-        <Solutions />
         <Cta />
       </main>
       <Footer route="home" />

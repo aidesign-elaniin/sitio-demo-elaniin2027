@@ -19,11 +19,21 @@ export function formatMonth(lang: Lang, isoYearMonth: string): string {
   );
 }
 
+/*
+  Intl writes the space inside "p. m." and before "PM" as a no-break (U+00A0) or a narrow no-break (U+202F) space, and
+  which one depends on the engine and its ICU version: Node 20 and Chrome disagree on es-SV ("p.\u00a0m." against
+  "p. m."). The server and the browser must print the same text or React fails to hydrate, so every space becomes a
+  plain one.
+*/
+export const plainSpaces = (text: string): string => text.replace(/[\u00a0\u202f]/g, " ");
+
 /** "14:30" -> "2:30 PM" (en) / "2:30 p. m." (es). The input is a neutral 24-hour "HH:MM". */
 export function formatTime(lang: Lang, hhmm: string): string {
   const [hours, minutes] = hhmm.split(":").map(Number);
-  return new Intl.DateTimeFormat(intlLocale(lang), { hour: "numeric", minute: "2-digit", timeZone: "UTC" }).format(
-    new Date(Date.UTC(2000, 0, 1, hours, minutes)),
+  return plainSpaces(
+    new Intl.DateTimeFormat(intlLocale(lang), { hour: "numeric", minute: "2-digit", timeZone: "UTC" }).format(
+      new Date(Date.UTC(2000, 0, 1, hours, minutes)),
+    ),
   );
 }
 
@@ -40,7 +50,11 @@ export const formatCurrency = (lang: Lang, value: number, currency: "USD"): stri
   }).format(value);
 
 /** A fraction as a percentage: 0.82 -> "82%". */
-export const formatPercent = (lang: Lang, fraction: number, options: { decimals?: number; signed?: boolean } = {}): string =>
+export const formatPercent = (
+  lang: Lang,
+  fraction: number,
+  options: { decimals?: number; signed?: boolean } = {},
+): string =>
   new Intl.NumberFormat(intlLocale(lang), {
     style: "percent",
     minimumFractionDigits: options.decimals ?? 0,

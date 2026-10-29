@@ -9,7 +9,7 @@ describe("hero and clients dictionaries", () => {
     for (const hero of [heroEn, heroEs]) {
       expect(hero.headline.split(" ").length).toBeGreaterThan(2);
       expect(hero.lead.length).toBeGreaterThan(0);
-      expect(hero.cta.length).toBeGreaterThan(0);
+      expect(hero.ctaSales.length).toBeGreaterThan(0);
     }
   });
 

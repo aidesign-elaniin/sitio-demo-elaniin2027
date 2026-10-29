@@ -13,6 +13,7 @@ const ALLOWED = new Set([
   "PR #142", // pull request id inside the delivery mock (not a word)
   "9:41", // clock of the phone status bar in the signup mock
   "Elaniin", // brand name (logo alt)
+  "", // empty alt: a decorative image has no accessible name (the client logos that animate; the names are announced once)
   "Marta R.", // invented driver name in the shipment mock (a proper name, not copy)
   // invented client brand names of the placeholder logos: never translated
   "altamar",
@@ -42,7 +43,12 @@ function literals(file: string): string[] {
       const text = node.getText().replace(/\s+/g, " ").trim();
       if (/[\p{L}]/u.test(text)) found.push(text);
     }
-    if (ts.isJsxAttribute(node) && ATTRIBUTES.has(node.name.getText()) && node.initializer && ts.isStringLiteral(node.initializer)) {
+    if (
+      ts.isJsxAttribute(node) &&
+      ATTRIBUTES.has(node.name.getText()) &&
+      node.initializer &&
+      ts.isStringLiteral(node.initializer)
+    ) {
       found.push(node.initializer.text);
     }
     ts.forEachChild(node, visit);
@@ -53,8 +59,8 @@ function literals(file: string): string[] {
 
 describe("jsx literals", () => {
   it("has no literal visible text or accessible name in any component", () => {
-    const offenders = [...walk(path.join(root, "src/app")), ...walk(path.join(root, "src/components"))].flatMap((file) =>
-      literals(file).map((text) => `${path.relative(root, file)}: ${text}`),
+    const offenders = [...walk(path.join(root, "src/app")), ...walk(path.join(root, "src/components"))].flatMap(
+      (file) => literals(file).map((text) => `${path.relative(root, file)}: ${text}`),
     );
     expect(offenders).toEqual([]);
   });

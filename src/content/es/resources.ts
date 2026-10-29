@@ -2,6 +2,11 @@ import type { ResourcesCopy } from "../schema";
 
 /* Contenido de ejemplo. Estructura de docs/sitemap-elaniin.md 3.18 a 3.20. */
 export const resources: ResourcesCopy = {
+  articles: {
+    insights: { title: "Insights", description: "Ideas sobre producto e ingeniería" },
+    playbook: { title: "Playbook de entregas", description: "Cómo entregamos cada semana" },
+    aiReport: { title: "Informe de IA", description: "Qué funciona y qué no en operaciones" },
+  },
   hub: {
     hero: {
       headline: "Pruebas y criterio, antes de decidir.",

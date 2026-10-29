@@ -18,7 +18,7 @@ const SUGGESTED: { id: "solutions" | "cases" | "research"; to: Target }[] = [
 
 /*
   404 page (DESIGN.md components.not-found): the site shell (Nav and Footer), a left-aligned message on the hero's module
-  field, and a hairline grid of three useful links. Rendered by app/[lang]/not-found.tsx, in the language of the URL.
+  field, and a hairline grid of three useful links. Rendered by app/[lang]/[...slug]/not-found.tsx, in the language of the URL.
 */
 export async function NotFound() {
   const [lang, copy] = await Promise.all([getLang(), getCopy("notFound")]);

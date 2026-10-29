@@ -27,7 +27,7 @@ export function SolutionsGrid({ copy, lang }: { copy: SolutionsCopy; lang: Lang 
       <div className="grid gap-4 lg:grid-cols-3">
         {solutionItems.map((item, i) => (
           <Reveal key={item.id} className="h-full" delay={i * 0.08}>
-            <SolutionCard item={item} copy={copy} lang={lang} onOpen={(trigger) => open(item.id, trigger)} />
+            <SolutionCard item={item} copy={copy} onOpen={(trigger) => open(item.id, trigger)} />
           </Reveal>
         ))}
       </div>

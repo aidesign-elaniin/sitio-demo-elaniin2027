@@ -1,7 +1,7 @@
-import type { EngagementId } from "@/components/sections/nav/nav-data";
+import type { EngagementModel } from "@/components/sections/nav/nav-data";
 
 /* Model order of the finder: option i of every question points to model i. */
-export const finderModels: EngagementId[] = ["staffAugmentation", "dedicatedTeams", "projectDelivery"];
+export const finderModels: EngagementModel[] = ["staffAugmentation", "dedicatedTeams", "projectDelivery"];
 
 /*
   Points per question, option and model (same order as finderModels). The option that names a model gives it 3, the
@@ -14,7 +14,7 @@ const SCORES: number[][][] = [
 ];
 
 /** Where each model sits between "your team leads" (0) and "Elaniin leads" (100). */
-export const leadPosition: Record<EngagementId, number> = { staffAugmentation: 8, dedicatedTeams: 52, projectDelivery: 92 };
+export const leadPosition: Record<EngagementModel, number> = { staffAugmentation: 8, dedicatedTeams: 52, projectDelivery: 92 };
 
 export type Answers = (number | null)[];
 

@@ -5,8 +5,10 @@ import Link from "next/link";
 import { ArrowRight, Check, RotateCcw } from "lucide-react";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHead } from "@/components/ui/section-head";
-import { engagementItems } from "@/components/sections/nav/nav-data";
-import type { EngagementCopy, NavCopy } from "@/content/schema";
+import { engagementModels, type EngagementModel } from "@/components/sections/nav/nav-data";
+
+const navIdOf = (id: EngagementModel) => engagementModels.find((m) => m.id === id)!.navId;
+import type { EngagementModelsCopy, NavCopy } from "@/content/schema";
 import { cn } from "@/lib/cn";
 import type { Lang } from "@/lib/i18n";
 import { href } from "@/lib/routes";
@@ -28,7 +30,7 @@ export function Comparison({
   names,
   lang,
 }: {
-  copy: EngagementCopy["hub"]["comparison"];
+  copy: EngagementModelsCopy["hub"]["comparison"];
   names: NavCopy["engagement"]["items"];
   lang: Lang;
 }) {
@@ -92,7 +94,7 @@ export function Comparison({
                   <div key={id} className="min-w-0">
                     <div className="flex items-baseline justify-between gap-3">
                       <span className={cn("text-body-sm font-medium", isBest ? "text-text-primary" : "text-text-secondary")}>
-                        {names[id].title}
+                        {names[navIdOf(id)].title}
                       </span>
                       <span className="text-caption text-text-muted tabular-nums">
                         {scores ? fill(f.match, { n: value }) : "—"}
@@ -136,7 +138,7 @@ export function Comparison({
                 {finderModels.map((id, i) => (
                   <span
                     key={id}
-                    title={names[id].title}
+                    title={names[navIdOf(id)].title}
                     className={cn(
                       "absolute top-1/2 grid -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border transition-all duration-300 ease-emphasized motion-reduce:transition-none",
                       marked === i ? "size-5 border-elevate-blue bg-elevate-blue" : "size-3 border-border-strong bg-white",
@@ -175,7 +177,7 @@ export function Comparison({
             <thead>
               <tr className="border border-border-default">
                 <td className="w-1/4 p-6" />
-                {engagementItems.map((m, i) => {
+                {engagementModels.map((m, i) => {
                   const on = marked === i;
                   return (
                     <th
@@ -193,7 +195,7 @@ export function Comparison({
                           on ? "text-text-on-dark hover:text-text-on-dark-accent focus-ring-on-dark" : "text-text-primary hover:text-text-link focus-ring",
                         )}
                       >
-                        {names[m.id].title}
+                        {names[m.navId].title}
                       </Link>
                       <button
                         type="button"
@@ -220,7 +222,7 @@ export function Comparison({
                   <th scope="row" className="p-6 align-top text-body-sm font-medium text-text-primary transition-colors duration-150 group-hover:bg-surface-subtle">
                     {criterion}
                   </th>
-                  {engagementItems.map((m, i) => (
+                  {engagementModels.map((m, i) => (
                     <td
                       key={m.id}
                       className={cn(
@@ -241,7 +243,7 @@ export function Comparison({
           {/* Below 768px: one model at a time. */}
           <div className="mt-6 md:hidden">
             <div role="group" aria-label={copy.title} className="grid grid-cols-3 gap-1 rounded-button border border-border-default bg-white p-1">
-              {engagementItems.map((m, i) => (
+              {engagementModels.map((m, i) => (
                 <button
                   key={m.id}
                   type="button"
@@ -252,21 +254,21 @@ export function Comparison({
                     mobile === i ? "bg-surface-dark text-text-on-dark" : "text-text-secondary",
                   )}
                 >
-                  {names[m.id].title}
+                  {names[m.navId].title}
                 </button>
               ))}
             </div>
             <div className="mt-3 rounded-card border border-border-default bg-white pad-card">
               <h4 className="font-display text-body-lg font-medium">
-                <Link href={href(engagementItems[mobile].id, lang)} className="rounded-tag text-text-primary hover:text-text-link focus-ring">
-                  {names[engagementItems[mobile].id].title}
+                <Link href={href(engagementModels[mobile].id, lang)} className="rounded-tag text-text-primary hover:text-text-link focus-ring">
+                  {names[engagementModels[mobile].navId].title}
                 </Link>
               </h4>
               <dl className="mt-4 divide-y divide-border-default">
                 {copy.criteria.map((criterion, r) => (
                   <div key={criterion} className="py-3">
                     <dt className="text-body-sm font-medium text-text-primary">{criterion}</dt>
-                    <dd className="mt-1 text-body-sm text-text-secondary">{copy.rows[engagementItems[mobile].id][r]}</dd>
+                    <dd className="mt-1 text-body-sm text-text-secondary">{copy.rows[engagementModels[mobile].id][r]}</dd>
                   </div>
                 ))}
               </dl>

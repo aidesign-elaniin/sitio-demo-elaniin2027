@@ -6,7 +6,7 @@ import { cn } from "@/lib/cn";
 import { LOOKS, SolutionSurface } from "@/components/ui/solution-surface";
 import type { NavCopy } from "@/content/schema";
 import type { Lang } from "@/lib/i18n";
-import { appliedAiTarget, resolveTarget, solutions, solutionsTarget, type Solution } from "./nav-data";
+import { ctaTarget, resolveTarget, solutions, solutionsTarget, type Solution } from "./nav-data";
 
 /*
   Menu type 2: the three solution lines as three inset cards. Each one has its own character through a surface, a
@@ -29,7 +29,7 @@ export function SolutionsMenu({ lang, copy }: { lang: Lang; copy: NavCopy }) {
             {copy.solutions.all}
             <ArrowRight className="size-4" strokeWidth={1.5} aria-hidden="true" />
           </Button>
-          <Button variant="tertiary" href={resolveTarget(appliedAiTarget, lang)}>
+          <Button variant="tertiary" href={resolveTarget(ctaTarget, lang)}>
             {copy.solutions.help.action}
             <ArrowRight className="size-4" strokeWidth={1.5} aria-hidden="true" />
           </Button>

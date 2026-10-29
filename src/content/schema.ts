@@ -26,12 +26,12 @@ type Point = { title: string; text: string };
   map lists for it. Proof strips are client names from the site map: never translated, never invented.
 */
 export type ServiceLineCopy<S extends string> = {
-  hub: { hero: HeroCopy; intro: SectionHead; cards: Record<S, Point>; proof: string[] };
+  hub: { hero: PageHeroCopy; intro: SectionHead; cards: Record<S, Point>; proof: string[] };
   services: Record<S, ServicePageCopy>;
 };
 
 export type ServicePageCopy = {
-  hero: HeroCopy;
+  hero: PageHeroCopy;
   problem?: SectionHead & { points: Point[] };
   includes: SectionHead & { items: Point[] };
   highlight?: SectionHead & { link?: string };
@@ -148,7 +148,7 @@ export type Industry = "publicSector" | "financialServices" | "restaurants" | "r
 */
 export type IndustriesCopy = {
   hub: {
-    hero: HeroCopy;
+    hero: PageHeroCopy;
     intro: SectionHead;
     cards: Record<Industry, Point>;
     stats: SectionHead & { labels: Record<"industries" | "services" | "models", string> };
@@ -157,7 +157,7 @@ export type IndustriesCopy = {
   pages: Record<
     Industry,
     {
-      hero: HeroCopy;
+      hero: PageHeroCopy;
       data: SectionHead & { points: Point[] };
       cases: SectionHead & { empty: string; all: string };
       featured: SectionHead;
@@ -175,14 +175,16 @@ export type LandingsCopy = {
   servicesTitle: string;
   servicesLead: Lead;
   caseLabel: string;
-  pages: Record<Landing, { hero: HeroCopy; proof: string[] }>;
+  pages: Record<Landing, { hero: PageHeroCopy; proof: string[] }>;
 };
 
 /* Resources hub, Use Cases and Research (docs/sitemap-elaniin.md 3.18 to 3.20). */
 export type ResourcesCopy = {
-  hub: { hero: HeroCopy; intro: SectionHead; cards: Record<"useCases" | "research", Point> };
-  useCases: { hero: HeroCopy; filterLabel: string; all: string; industries: Record<Industry, string> };
-  research: { hero: HeroCopy };
+  /** The three sample articles (their pages live under /resources/articles). */
+  articles: Record<ArticleId, TitleDesc>;
+  hub: { hero: PageHeroCopy; intro: SectionHead; cards: Record<"useCases" | "research", Point> };
+  useCases: { hero: PageHeroCopy; filterLabel: string; all: string; industries: Record<Industry, string> };
+  research: { hero: PageHeroCopy };
 };
 
 /*
@@ -232,9 +234,9 @@ export type FinderCopy = {
 };
 type FinderQuestion = { label: string; options: [string, string, string] };
 
-export type EngagementCopy = {
+export type EngagementModelsCopy = {
   hub: {
-    hero: HeroCopy;
+    hero: PageHeroCopy;
     intro: SectionHead;
     comparison: SectionHead & { criteria: string[]; rows: Record<EngagementModel, string[]>; finder: FinderCopy };
   };
@@ -246,13 +248,13 @@ export type EngagementCopy = {
   blocks reuse the nav solution cards (titles, descriptions and sublinks), so only the hero and the Applied AI mention are new.
 */
 export type SolutionsPageCopy = {
-  hero: HeroCopy;
+  hero: PageHeroCopy;
   appliedAi: SectionHead & { link: string };
 };
 
 /* Applied AI page (docs/sitemap-elaniin.md 3.17). Service keys match the solution ids of the nav. */
 export type AppliedAiCopy = {
-  hero: HeroCopy;
+  hero: PageHeroCopy;
   pillars: SectionHead & { items: Record<"capacity" | "humanLoop" | "deliverables", { title: string; text: string }> };
   services: SectionHead & { items: Record<"software" | "ai" | "cloud", { name: string; text: string; link: string }> };
   evidence: SectionHead & {
@@ -293,65 +295,74 @@ export type CommonCopy = {
 /* Nav. Keys of the records match the ids in src/components/sections/nav/nav-data.ts. */
 type TitleDesc = { title: string; description: string };
 
-type FeaturedCard = { tag: string; title: string; metric: string };
+/* A case of the featured card of the Resources menu: its title and the text of its button. */
+type FeaturedCard = { title: string; action: string; metric: string };
 
 export type NavCopy = {
   homeAria: string;
   mobileNavLabel: string;
   cta: string;
+  /** The second CTA, beside the conversation one: it leads to the blog. */
+  blog: string;
   menu: { open: string; close: string };
   plain: Record<"appliedAi", string>;
   solutions: {
     trigger: string;
-    /** One label per sublink target in nav-data (software 4, ai 1, cloud 2). */
+    /** The link to the Solutions hub in the footer strip of the menu. */
+    all: string;
     items: Record<"software" | "ai" | "cloud", TitleDesc & { links: string[] }>;
     help: { question: string; action: string };
-    /** Link to the Solutions hub page. */
-    all: string;
   };
   engagement: {
     trigger: string;
-    heading: string;
-    items: Record<"staffAugmentation" | "dedicatedTeams" | "projectDelivery", TitleDesc>;
+    items: Record<"staff" | "dedicated" | "project", TitleDesc>;
+    /* The sample names of the staff scene shown in the cards of the menu: the same ones as the section. */
+    visuals: EngagementVisualsCopy;
     help: { question: string; action: string };
-    /** Legend of the team compositions and ends of the "who leads" scale. */
-    scale: { yours: string; ours: string };
   };
   resources: {
     trigger: string;
-    explore: { heading: string; items: Record<"useCases" | "research", TitleDesc> };
-    latest: { heading: string; items: Record<"insights" | "playbook" | "aiReport", TitleDesc> };
-    featured: { heading: string; subtitle: string; cards: [FeaturedCard, FeaturedCard, FeaturedCard] };
+    items: Record<"cases" | "research" | "hub", TitleDesc>;
+    /* The two cards carry the strings of their scene (copied from the cases dictionary) so the menu can show it cropped. */
+    featured: {
+      heading: string;
+      subtitle: string;
+      cards: [FeaturedCard & { scene: ShipmentSceneCopy }, FeaturedCard & { scene: SignupSceneCopy }];
+    };
   };
 };
 
-/** One label per target in src/components/sections/footer/footer-data.ts. */
 type FooterColumn = { heading: string; links: string[] };
 
 export type FooterCopy = {
   navLabel: string;
   socialsLabel: string;
   tagline: { lead: string; rest: string };
-  newsletter: {
-    first: string;
-    last: string;
-    email: string;
-    submit: string;
-    sending: string;
-    /** One sentence with a {terms} placeholder where the link goes. */
-    legal: string;
-    terms: string;
-    success: string;
-    invalidEmail: string;
-  };
+  /** The AI summary at the end of the legal row. `prompt` has a {url} placeholder; `opensIn` is added to each link's name. */
+  aiSummary: { label: string; prompt: string; opensIn: string };
   columns: [FooterColumn, FooterColumn, FooterColumn, FooterColumn];
-  /** Legal, Privacy, Status, Report an issue (footer-data legalRoutes). */
-  legal: [string, string, string, string];
+  /** The entity line under the tagline. */
+  entity: string;
+  /** The credentials row: the visible label above it (mono, uppercase) and the name (alt text) of each badge, keyed by the ids in credentials.ts. */
+  credentials: { label: string; items: Record<"aws" | "google" | "webflow" | "clutchGlobal" | "clutchSoftware" | "clutchStaff" | "gptw" | "claude", string> };
+  legal: string[];
   copyright: string;
-  placeholder: string;
 };
 
-export type HeroCopy = { headline: string; lead: string; cta: string };
+/* `stack` holds the short names that label the slabs of the isometric resource (icon + name). */
+/** Hero of an inner page (centered variant): headline, lead and one button. */
+export type PageHeroCopy = { headline: string; lead: string; cta: string };
+
+export type HeroCopy = {
+  headline: string;
+  /** The words of the headline that take the accent color; they must appear in the headline as written. */
+  accent: string;
+  lead: string;
+  /** The two buttons of the pair: the short sales CTA and the muted one that leads to the method. */
+  ctaSales: string;
+  ctaMethod: string;
+  stack: { software: string; ai: string; cloud: string };
+};
 
 export type ClientsCopy = { label: string };
 
@@ -369,14 +380,16 @@ export type ResearchCopy = {
   units: { percent: string; outOfTen: string };
   /** Spoken form of the figure for screen readers, with an {n} placeholder. */
   spoken: { percent: string; outOfTen: string };
+  /** Reading time of the home list, with an {n} placeholder for the minutes. */
+  readTime: string;
   items: Record<"ai-pilots" | "cloud-spend" | "weekly-delivery" | "long-signups", { finding: string; source: string }>;
 };
 
 /* Solutions. Keys of the records match the ids in src/components/sections/solutions/solutions-data.ts. */
-type DeliveryStep = { label: string; meta: string };
-export type DeliveryVisualCopy = { steps: [DeliveryStep, DeliveryStep, DeliveryStep, DeliveryStep]; status: { running: string; done: string } };
-export type AssistantVisualCopy = { question: string; answer: string; confirm: string; orders: string };
-export type CloudVisualCopy = { availability: string; regions: string };
+/* The four stages of the AI delivery scene, in order: tests, review, staging, production. */
+export type DeliveryVisualCopy = { steps: [string, string, string, string] };
+/* The pill of the cloud scene. */
+export type CloudVisualCopy = { availability: string };
 
 type Bullet = { title: string; text: string };
 
@@ -399,7 +412,8 @@ export type SolutionsCopy = {
   dialog: { close: string; talk: string };
   items: Record<"software" | "ai" | "cloud", SolutionText>;
   units: { minutes: string };
-  visuals: { software: DeliveryVisualCopy; ai: AssistantVisualCopy; cloud: CloudVisualCopy };
+  /* Each mock is named for what it shows; which card uses which is decided in solution-visual.tsx. */
+  visuals: { delivery: DeliveryVisualCopy; product: ProductVisualCopy; cloud: CloudVisualCopy };
 };
 
 /* Cases. Keys of the records match the ids in src/components/sections/cases/cases-data.ts. Placeholders: {id} {n} {place} {time} {amount}. */
@@ -480,6 +494,58 @@ export type CloudSceneCopy = {
 
 export type CaseId = "delivery-tracking" | "sme-payments" | "support-assistant" | "cloud-migration";
 
+
+/* The three tiers of the software scene, from the widest (bottom) to the top one. */
+export type ProductVisualCopy = { platform: string; web: string; mobile: string };
+
+/* Audience routes (DESIGN.md components.audience-routes). Each sector lists its three items in the order of audience-routes-data.ts. */
+export type RouteCase = { title: string; result: string };
+
+export type AudienceRouteText = {
+  id: "staff" | "modernization" | "software" | "critical" | "impact" | "availability";
+  lead: string;
+  rest: string;
+  link: string;
+  cases: [RouteCase, RouteCase]; // sample success stories (DESIGN.md components.audience-routes.cases-panel)
+};
+
+/* Labels of the three isometric resources of the routes (pills and the like). Brand names are not here. */
+export type AudienceVisualsCopy = {
+  staff: { team: string };
+  modernization: { legacy: string; modern: string };
+  public: { documented: string; secure: string; traceable: string };
+  software: { product: string };
+  critical: { label: string };
+  impact: { label: string };
+  availability: { primary: string; backup: string };
+};
+
+export type AudienceRoutesCopy = {
+  title: string;
+  lead: string;
+  toggle: { label: string; private: string; public: string };
+  casesLabel: string; // title of the panel and label of the touch button: "Success stories"
+  casesClose: string; // accessible name of the close button of the panel (touch)
+  sectors: {
+    private: [AudienceRouteText, AudienceRouteText, AudienceRouteText];
+    public: [AudienceRouteText, AudienceRouteText, AudienceRouteText];
+  };
+  visuals: AudienceVisualsCopy;
+};
+
+/* Engagement models (DESIGN.md components.engagement-models). Ids of the models match engagement-data.ts, in the same order. */
+export type EngagementModelText = { id: "staff" | "dedicated" | "project"; name: string; rest: string; fit: string; link: string };
+
+/* Sample first names on the pills of the staff scene (DESIGN.md motifs.engagement-scenes). */
+export type EngagementVisualsCopy = { staff: { names: [string, string, string] } };
+
+export type EngagementCopy = {
+  title: string;
+  lead: string;
+  items: [EngagementModelText, EngagementModelText, EngagementModelText];
+  visuals: EngagementVisualsCopy;
+};
+
 export type CasesCopy = {
   title: string;
   lead: { strong: string; rest: string };
@@ -510,6 +576,7 @@ export interface Schema {
   footer: FooterCopy;
   hero: HeroCopy;
   clients: ClientsCopy;
+  audienceRoutes: AudienceRoutesCopy;
   research: ResearchCopy;
   solutions: SolutionsCopy;
   cases: CasesCopy;
@@ -522,6 +589,7 @@ export interface Schema {
   cloud: ServiceLineCopy<CloudService>;
   ai: ServiceLineCopy<AiService>;
   engagement: EngagementCopy;
+  engagementModels: EngagementModelsCopy;
   resources: ResourcesCopy;
   contact: ContactCopy;
   industries: IndustriesCopy;

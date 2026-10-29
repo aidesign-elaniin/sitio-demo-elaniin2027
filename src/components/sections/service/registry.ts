@@ -1,5 +1,5 @@
 import { AppWindow, Network, Server, ShieldCheck, type LucideIcon } from "lucide-react";
-import type { EngagementId, Target } from "@/components/sections/nav/nav-data";
+import type { EngagementModel, Target } from "@/components/sections/nav/nav-data";
 import type { PageRoute } from "@/content/schema";
 import { routes, type RouteKey } from "@/lib/routes";
 
@@ -11,7 +11,7 @@ import { routes, type RouteKey } from "@/lib/routes";
 export type ServiceEntry = {
   route: PageRoute;
   /** Engagement models suggested on the page (docs/sitemap-elaniin.md); empty hides the section. */
-  models: EngagementId[];
+  models: EngagementModel[];
   /** Where the highlight block links, when it has a link. */
   highlight?: Target;
   /** When "what's included" is a chain (architecture to QA): one icon per item, drawn as a connected flow. */

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Cta } from "@/components/sections/cta/cta";
-import { Comparison } from "@/components/sections/engagement/comparison";
+import { Comparison } from "@/components/sections/engagement-models/comparison";
 import { Footer } from "@/components/sections/footer/footer";
 import { HeroView } from "@/components/sections/hero/hero";
 import { Nav } from "@/components/sections/nav/nav";
-import { engagementItems } from "@/components/sections/nav/nav-data";
+import { engagementModels } from "@/components/sections/nav/nav-data";
 import { ServiceCards } from "@/components/sections/service/service-cards";
 import { getCopy, getLang } from "@/content";
 import { anchors } from "@/lib/anchors";
@@ -20,14 +20,14 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function EngagementModels() {
   const [lang, copy, nav, common] = await Promise.all([
     getLang(),
-    getCopy("engagement"),
+    getCopy("engagementModels"),
     getCopy("nav"),
     getCopy("services"),
   ]);
-  const cards = engagementItems.map((m) => ({
+  const cards = engagementModels.map((m) => ({
     route: m.id,
-    title: nav.engagement.items[m.id].title,
-    text: nav.engagement.items[m.id].description,
+    title: nav.engagement.items[m.navId].title,
+    text: nav.engagement.items[m.navId].description,
   }));
   return (
     <>

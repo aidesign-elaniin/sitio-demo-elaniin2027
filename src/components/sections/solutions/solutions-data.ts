@@ -13,8 +13,7 @@ export type SolutionId = "software" | "ai" | "cloud";
 
 /** A figure, kept numeric so it is formatted with Intl in the language of the page. */
 export type Metric =
-  | { kind: "minutes"; value: number }
-  | { kind: "percent"; value: number; decimals?: number; signed?: boolean };
+  { kind: "minutes"; value: number } | { kind: "percent"; value: number; decimals?: number; signed?: boolean };
 
 export type SolutionItem = {
   id: SolutionId;
@@ -29,20 +28,20 @@ const navIcon = (id: SolutionId) => navSolutions.find((n) => n.id === id)!.icon;
 
 export const solutionItems: SolutionItem[] = [
   {
-    id: "software",
-    icon: navIcon("software"),
-    metrics: [
-      { kind: "minutes", value: 14 },
-      { kind: "percent", value: 0.82 },
-    ],
-    route: "softwareDevelopment",
-  },
-  {
     id: "ai",
     icon: navIcon("ai"),
     metrics: [
       { kind: "percent", value: 0.35, signed: true },
       { kind: "percent", value: 1 },
+    ],
+    route: "softwareDevelopment",
+  },
+  {
+    id: "software",
+    icon: navIcon("software"),
+    metrics: [
+      { kind: "minutes", value: 14 },
+      { kind: "percent", value: 0.82 },
     ],
     route: "aiSolutions",
   },

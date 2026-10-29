@@ -1,8 +1,11 @@
 import type { HeroCopy } from "../schema";
 
-/* Contenido de ejemplo. El titular se divide por espacios para la entrada palabra a palabra. */
+/* Texto del hero entregado por el equipo (2026-10-26). El titular se divide por espacios para la entrada palabra a palabra. */
 export const hero: HeroCopy = {
-  headline: "Software que sostiene tu operación.",
-  lead: "Producto, diseño e ingeniería en un solo equipo. Entregamos en producción, con medición real y sin intermediarios.",
-  cta: "Cuéntanos tu proyecto",
+  headline: "Construimos el software inteligente sobre el que opera tu negocio.",
+  accent: "software inteligente",
+  lead: "Desarrollamos y modernizamos software a la medida, con IA aplicada.",
+  ctaSales: "Conversemos",
+  ctaMethod: "Cómo entregamos",
+  stack: { software: "Software", ai: "AI delivery", cloud: "Cloud" },
 };

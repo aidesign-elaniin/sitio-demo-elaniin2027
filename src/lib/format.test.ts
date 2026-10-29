@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { formatCurrency, formatMonth, formatNumber, formatPercent, formatTime, intlLocale } from "./format";
+import {
+  formatCurrency,
+  formatMonth,
+  formatNumber,
+  formatPercent,
+  formatTime,
+  intlLocale,
+  plainSpaces,
+} from "./format";
 
 describe("format", () => {
   it("formats a year-month in the language of the page", () => {
@@ -33,7 +41,14 @@ describe("format", () => {
 
   it("formats a clock time on a 12-hour clock in both languages", () => {
     expect(formatTime("en", "14:30")).toBe("2:30 PM");
-    expect(formatTime("es", "14:30")).toMatch(/^2:30\s+p\.\s?m\.$/);
-    expect(formatTime("es", "09:12")).toMatch(/^9:12\s+a\.\s?m\.$/);
+    expect(formatTime("es", "14:30")).toBe("2:30 p. m.");
+    expect(formatTime("es", "09:12")).toBe("9:12 a. m.");
+  });
+
+  it("prints times with plain spaces only, so the server and the browser agree (hydration)", () => {
+    expect(plainSpaces("2:30\u00a0PM")).toBe("2:30 PM");
+    expect(plainSpaces("2:30\u202fp.\u00a0m.")).toBe("2:30 p. m.");
+    expect(formatTime("es", "14:30")).not.toMatch(/[\u00a0\u202f]/);
+    expect(formatTime("en", "14:30")).not.toMatch(/[\u00a0\u202f]/);
   });
 });

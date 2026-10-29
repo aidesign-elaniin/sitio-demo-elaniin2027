@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Sparkles, UserCheck } from "lucide-react";
+import { Check, UserCheck } from "lucide-react";
+import { AiIcon } from "@/components/ui/icons/elaniin-icons";
 import type { AppliedAiCopy } from "@/content/schema";
 import { cn } from "@/lib/cn";
 import { useClock } from "@/lib/use-clock";
@@ -68,7 +69,7 @@ export function LoopPicture({ labels }: { labels: AppliedAiCopy["pictures"]["loo
         />
 
         <span aria-hidden="true" className={cn(node, "left-6 border border-border-strong bg-white text-elevate-blue")}>
-          <Sparkles className="size-5" strokeWidth={1.5} />
+          <AiIcon className="size-5" strokeWidth={1.5} />
         </span>
 
         {/* The person: click to approve the draft under review. The ring fills while reviewing. */}
@@ -76,7 +77,7 @@ export function LoopPicture({ labels }: { labels: AppliedAiCopy["pictures"]["loo
           type="button"
           onClick={() => setForced(index)}
           aria-label={labels.person}
-          className={cn(node, "left-1/2 cursor-pointer bg-surface-dark text-text-on-dark transition-transform duration-150 ease-standard hover:scale-105 focus-ring")}
+          className={cn(node, "left-1/2 cursor-pointer bg-surface-dark text-text-on-dark transition-transform duration-150 ease-standard focus-ring")}
         >
           <svg aria-hidden="true" className="absolute -inset-1.5 size-[calc(100%+0.75rem)] -rotate-90" viewBox="0 0 40 40">
             <circle cx="20" cy="20" r="18.5" fill="none" className="stroke-border-default" strokeWidth="1.5" />

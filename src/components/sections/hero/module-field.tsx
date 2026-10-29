@@ -23,10 +23,12 @@ export const STEPS = [
 // Resting grid: small and faint, so it reads as texture and never competes with text or a glow.
 const REST_OPACITY = 0.45;
 
-type Fade = "bottom" | "left" | "none";
+type Fade = "bottom" | "left" | "center" | "none";
 const masks: Record<Fade, string | undefined> = {
   bottom: "linear-gradient(to bottom, #000 35%, transparent 100%)",
   left: "linear-gradient(to right, transparent 8%, #000 60%)",
+  // Squares around the edges and a clear middle, for centered text.
+  center: "radial-gradient(70% 90% at 50% 50%, transparent 25%, #000 100%)",
   none: undefined,
 };
 

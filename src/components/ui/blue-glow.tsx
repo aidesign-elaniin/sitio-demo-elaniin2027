@@ -11,8 +11,10 @@ import { cn } from "@/lib/cn";
   Pure CSS (only transform animates). Decorative.
 
   Variants (DESIGN.md motifs.glow):
-    "cta"   dark surface (Excellence Blue), centered and masked toward the bottom right, behind the closing CTA.
+    "cta"   dark surface (Excellence Blue), centered, strongest at the bottom center and masked toward the top and both sides, behind the closing CTA.
     "media" dark surface (Excellence Blue), fills its box, behind the product scenes of the case-study cards.
+  Cost on phones: the blur pass over six moving layers is the expensive part, so it only runs from 1024px, and below 768px the
+  third tile of each layer is left out (two repeats still cover the width).
 */
 const ANGLE = 115; // deg
 const PERIOD = 640; // px along the gradient line
@@ -33,7 +35,7 @@ function Layer({ stripes, duration }: { stripes: string; duration: number }) {
       {Array.from({ length: TILES }, (_, i) => (
         <div
           key={i}
-          className="glow-scroll absolute inset-y-0"
+          className={cn("glow-scroll absolute inset-y-0", i === TILES - 1 && "max-md:hidden")}
           style={
             {
               left: i * REPEAT,
@@ -63,7 +65,7 @@ export function BlueGlow({ variant = "cta", className }: { variant?: keyof typeo
       )}
     >
       <div
-        className="absolute inset-0 blur-md"
+        className="absolute inset-0 [contain:paint] lg:blur-md"
         style={
           {
             opacity: v.opacity,

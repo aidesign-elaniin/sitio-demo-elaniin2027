@@ -2,13 +2,14 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/ui/reveal";
 import { getCopy, getLang } from "@/content";
-import { ResearchExplorer } from "./research-explorer";
+import { researchItems } from "./research-data";
+import { ResearchListRow } from "./research-list-row";
 import { anchors } from "@/lib/anchors";
 import { href } from "@/lib/routes";
 
 /*
-  Own research: an Elaniin Black band, a short header and a clean list with filters. The figure is the content of every
-  finding and the first thing in each row.
+  Our research (the latest of the blog): an Elaniin Black band, a short header with the link to the blog and a clean list of three
+  articles. Each row: the title, then the label, the date and the reading time.
 */
 export async function Research() {
   const [lang, copy] = await Promise.all([getLang(), getCopy("research")]);
@@ -28,10 +29,7 @@ export async function Research() {
             >
               {copy.title}
             </h2>
-            <p className="mt-6 max-w-[60ch] font-display text-lead">
-              <strong className="font-medium text-text-on-dark">{copy.lead.strong}</strong>{" "}
-              <span className="text-text-on-dark-secondary">{copy.lead.rest}</span>
-            </p>
+            <p className="mt-6 max-w-[60ch] text-lead text-text-on-dark-secondary">{copy.lead.strong} {copy.lead.rest}</p>
           </div>
           <Link
             href={href("research", lang)}
@@ -42,7 +40,13 @@ export async function Research() {
           </Link>
         </Reveal>
 
-        <ResearchExplorer copy={copy} lang={lang} />
+        <div className="border-t border-border-on-dark">
+          {researchItems.slice(0, 3).map((item, i) => (
+            <Reveal key={item.id} delay={i * 0.06}>
+              <ResearchListRow item={item} copy={copy} lang={lang} />
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
   );

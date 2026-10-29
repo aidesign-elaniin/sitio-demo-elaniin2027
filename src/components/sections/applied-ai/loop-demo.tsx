@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "motion/react";
-import { Check, MessageSquare, Sparkles, UserCheck } from "lucide-react";
+import { Check, MessageSquare, UserCheck } from "lucide-react";
+import { AiIcon } from "@/components/ui/icons/elaniin-icons";
 import { SectionHead } from "@/components/ui/section-head";
 import type { AppliedAiCopy } from "@/content/schema";
 import { cn } from "@/lib/cn";
@@ -109,7 +110,7 @@ export function LoopDemo({ copy }: { copy: AppliedAiCopy["loop"] }) {
           {/* Lane 1: the AI writes. */}
           <div className="flex min-w-0 flex-col gap-5 bg-surface-dark p-6 text-text-on-dark lg:p-8">
             <p className="flex items-center gap-2 text-body-sm font-medium">
-              <Sparkles className="size-4 text-text-on-dark-accent" strokeWidth={1.5} aria-hidden="true" />
+              <AiIcon className="size-4 text-text-on-dark-accent" strokeWidth={1.5} aria-hidden="true" />
               {copy.lanes.ai}
             </p>
             <p className="min-h-36 font-mono text-body leading-relaxed" aria-live="polite" aria-busy={busy}>

@@ -25,23 +25,23 @@ async function resolve(params: Props["params"]) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const [item, lang, nav] = await Promise.all([resolve(params), getLang(), getCopy("nav")]);
-  const text = nav.resources.latest.items[item.id];
+  const [item, lang, resources] = await Promise.all([resolve(params), getLang(), getCopy("resources")]);
+  const text = resources.articles[item.id];
   return buildMetadata(lang, item.route, { title: `${text.title} | Elaniin`, description: text.description });
 }
 
 /* Article: header (tag, date, title, lead), the running text, CTA. */
 export default async function ArticlePage({ params }: Props) {
   const item = await resolve(params);
-  const [lang, nav, details] = await Promise.all([getLang(), getCopy("nav"), getCopy("details")]);
+  const [lang, resources, details] = await Promise.all([getLang(), getCopy("resources"), getCopy("details")]);
   const body = details.articles.items[item.id];
   return (
     <>
-      <Nav route={item.route} current={nav.resources.latest.items[item.id].title} />
+      <Nav route={item.route} current={resources.articles[item.id].title} />
       <main id="main">
         <DetailHeader
           tags={[details.articles.tag, formatMonth(lang, item.date)]}
-          title={nav.resources.latest.items[item.id].title}
+          title={resources.articles[item.id].title}
           lead={body.lead}
         />
         <Prose sections={body.sections} />

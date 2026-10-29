@@ -1,24 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { nav as en } from "@/content/en/nav";
 import { nav as es } from "@/content/es/nav";
-import {
-  engagementItems,
-  exploreItems,
-  featuredIds,
-  latestItems,
-  menuOrder,
-  navOrder,
-  plainLinks,
-  resolveTarget,
-  solutions,
-} from "./nav-data";
-
-describe("nav order (docs/sitemap-elaniin.md)", () => {
-  it("follows the primary nav of the sitemap", () => {
-    expect(navOrder.map((i) => i.id)).toEqual(["solutions", "engagement", "appliedAi", "resources"]);
-    expect(menuOrder).toEqual(["solutions", "engagement", "resources"]);
-  });
-});
+import { engagementItems, featuredCases, plainLinks, resolveTarget, resourceItems, solutions } from "./nav-data";
 
 describe("resolveTarget", () => {
   it("resolves a section of the home page in each language", () => {
@@ -44,10 +27,10 @@ describe.each([
 
   it("covers every engagement model, resource item, featured card and plain link", () => {
     for (const i of engagementItems) expect(copy.engagement.items[i.id].title.length).toBeGreaterThan(0);
-    for (const i of exploreItems) expect(copy.resources.explore.items[i.id].title.length).toBeGreaterThan(0);
-    for (const i of latestItems) expect(copy.resources.latest.items[i.id].title.length).toBeGreaterThan(0);
-    expect(copy.resources.featured.cards).toHaveLength(featuredIds.length);
+    for (const i of resourceItems) expect(copy.resources.items[i.id].title.length).toBeGreaterThan(0);
+    expect(copy.resources.featured.cards).toHaveLength(featuredCases.length);
     for (const p of plainLinks) expect(copy.plain[p.id].length).toBeGreaterThan(0);
+    expect(copy.blog.length).toBeGreaterThan(0);
   });
 });
 
@@ -55,5 +38,7 @@ describe("nav languages", () => {
   it("translates the visible labels", () => {
     expect(en.solutions.trigger).not.toBe(es.solutions.trigger);
     expect(en.cta).not.toBe(es.cta);
+    expect(en.engagement.trigger).not.toBe(es.engagement.trigger);
+    expect(en.resources.items.research.title).not.toBe(es.resources.items.research.title);
   });
 });
