@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Cta } from "@/components/sections/cta/cta";
 import { Footer } from "@/components/sections/footer/footer";
 import { Nav } from "@/components/sections/nav/nav";
+import { FigureDots } from "@/components/sections/research/figure-dots";
 import { researchItems, type ResearchItem } from "@/components/sections/research/research-data";
 import { FeatureGrid } from "@/components/sections/service/feature-grid";
 import { Highlight } from "@/components/sections/service/highlight";
@@ -28,11 +29,12 @@ async function resolve(params: Props["params"]) {
 }
 
 /* The figure reads into the finding: "62% de los pilotos…", "7 de 10 usuarios…". */
-const headline = (item: ResearchItem, copy: ResearchCopy, lang: Lang) => {
+const figure = (item: ResearchItem, copy: ResearchCopy, lang: Lang) => {
   const n = formatNumber(lang, item.value);
-  const figure = item.unit === "percent" ? `${n}${copy.units.percent}` : `${n} ${copy.units.outOfTen}`;
-  return `${figure} ${copy.items[item.id].finding}`;
+  return item.unit === "percent" ? `${n}${copy.units.percent}` : `${n} ${copy.units.outOfTen}`;
 };
+const headline = (item: ResearchItem, copy: ResearchCopy, lang: Lang) =>
+  `${figure(item, copy, lang)} ${copy.items[item.id].finding}`;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const [item, lang, copy] = await Promise.all([resolve(params), getLang(), getCopy("research")]);
@@ -56,7 +58,9 @@ export default async function StudyPage({ params }: Props) {
           tags={[copy.kinds[item.kind], copy.topics[item.topic], formatMonth(lang, item.date)]}
           title={headline(item, copy, lang)}
           lead={copy.items[item.id].source}
-        />
+        >
+          <FigureDots value={item.value} unit={item.unit} label={figure(item, copy, lang)} />
+        </DetailHeader>
         <Prose sections={[{ title: labels.method, paragraphs: [detail.method] }]} />
         <FeatureGrid id="findings-title" title={labels.findings} items={detail.findings} tone="subtle" />
         <Highlight title={labels.meaning} lead={{ strong: detail.meaning, rest: "" }} />

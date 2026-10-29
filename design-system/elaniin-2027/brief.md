@@ -37,6 +37,14 @@ El color sí diverge. La mitad del board usa acentos saturados (verde lima, nara
 ### Pasos de proceso
 - Una fila por paso: el número grande a la izquierda y el título con el texto a la derecha. ([Financial Match](https://www.theworldaccordingtome.org/2930470_ultimate-creative-web-ui-kits-twitch-stream-overlay-collection/?step-by-step-token-fintech-landing-pagebuilder-guide), [ContraBureau](https://www.lapa.ninja/post/contrabureau/))
 
+### Índice de páginas
+- Cada página va en una fila sobre hairlines: el título grande a la izquierda, la descripción al centro y una flecha ↗ a la derecha. ([Kus footer](https://www.footer.design/sites/kus), [ContraBureau](https://www.lapa.ninja/post/contrabureau/))
+### Bloque editorial dividido
+- El título grande va a la izquierda y el texto a la derecha, separados por una hairline superior. Sirve para los textos de detalle y para los bloques destacados. ([Portfolio templates](https://www.sitebuilderreport.com/graphic-design-portfolio-website-templates), [Merigrove](https://www.behance.net/nesoniadesign), (source: images/1115063189023185714.jpg))
+### Cifras con dirección y cifras en puntos
+- Junto a cada resultado va una flecha de tendencia (↓ -30%), como en un informe de impacto. (source: images/1115063189023234275.jpg)
+- Un porcentaje se dibuja como una matriz de puntos (100 puntos, con la proporción llena) y "x de 10" como 10 puntos. (source: images/1115063189023266945.jpg, images/1115063189023236551.jpg, images/1115063189023236518.jpg)
+
 ## States
 - La evidencia es escasa: los pins son estáticos. Solo se ve el estado activo de una columna (más ancha). ([Metrium](https://dribbble.com/shots/19133524-Metrium-Landing-Page-UI))
 - Hay loaders (círculo, puntos, reloj), pero de UI de app, no de sitio web. (source: images/1115063189023241063.jpg)
@@ -62,4 +70,7 @@ El color sí diverge. La mitad del board usa acentos saturados (verde lima, nara
 - Kus footer — https://www.footer.design/sites/kus — sin sección
 - ContraBureau — https://www.lapa.ninja/post/contrabureau/ — sin sección
 - Creative portfolio — https://payhip.com/TheListingLab/blog/news/50-essential-marketing-presentation-templates-for-effortless-impact/?creative-portfolio-website-design-inspiration-modern — sin sección
+- Portfolio templates — https://www.sitebuilderreport.com/graphic-design-portfolio-website-templates — sin sección
+- Merigrove studio — https://www.behance.net/nesoniadesign — sin sección
+- Anteelo — images/1115063189023185714.jpg — sin sección
 - Landing page (Artelly) — https://www.behance.net/gallery/239169197/Landing-page — sin sección

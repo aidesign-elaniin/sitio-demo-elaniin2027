@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { CaseMedia } from "@/components/sections/cases/case-media";
 import { CaseScene } from "@/components/sections/cases/case-scene";
 import { cases } from "@/components/sections/cases/cases-data";
@@ -35,6 +36,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const [item, lang, copy] = await Promise.all([resolve(params), getLang(), getCopy("cases")]);
   const text = copy.items[item.id];
   return buildMetadata(lang, item.route, { title: `${text.title} | Elaniin`, description: text.excerpt });
+}
+
+/* Direction of a result, as in an impact report (design-system/elaniin-2027/brief.md): "-42%" goes down, "+35%" and "3x" go up. */
+function Trend({ value }: { value: string }) {
+  const Icon = value.startsWith("-") ? ArrowDownRight : /^\+|x$/.test(value) ? ArrowUpRight : null;
+  if (!Icon) return null;
+  return (
+    <span aria-hidden="true" className="grid size-11 place-items-center rounded-full border border-border-default text-elevate-blue">
+      <Icon className="size-5" strokeWidth={1.5} />
+    </span>
+  );
 }
 
 /*
@@ -83,7 +95,10 @@ export default async function CasePage({ params }: Props) {
             {detail.results.map((r) => (
               <div key={r.label} className="flex min-w-0 flex-col-reverse gap-2 bg-white pad-card">
                 <dt className="text-body text-text-secondary">{r.label}</dt>
-                <dd className="font-display text-display-lg font-medium text-text-primary tabular-nums">{r.value}</dd>
+                <dd className="flex items-center gap-4 font-display text-display-lg font-medium text-text-primary tabular-nums">
+                  {r.value}
+                  <Trend value={r.value} />
+                </dd>
               </div>
             ))}
           </dl>
