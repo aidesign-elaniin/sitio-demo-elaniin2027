@@ -5,9 +5,10 @@ import { Reveal } from "@/components/ui/reveal";
 import { SectionHead } from "@/components/ui/section-head";
 import { engagementItems, resolveTarget, type EngagementId } from "@/components/sections/nav/nav-data";
 import type { NavCopy, ServicesCommonCopy } from "@/content/schema";
+import { cn } from "@/lib/cn";
 import type { Lang } from "@/lib/i18n";
 
-/* Suggested engagement models of a service page: the rows of the engagement menu as white cards on Inspire Grey. */
+/* Suggested engagement models of a service page: the rows of the engagement menu as white cards on Inspire Grey. Two models fill the row (two columns), three or more go three across. */
 export function Models({
   ids,
   head,
@@ -26,7 +27,7 @@ export function Models({
         <SectionHead id="models-title" title={head.title} lead={head.lead} />
       </div>
 
-      <ul className="container-site grid gap-4 pb-[var(--section-y)] md:grid-cols-2 lg:grid-cols-3">
+      <ul className={cn("container-site grid gap-4 pb-[var(--section-y)] md:grid-cols-2", models.length > 2 && "lg:grid-cols-3")}>
         {models.map((model, i) => (
           <li key={model.id} className="min-w-0">
             <Reveal delay={i * 0.06} className="h-full">

@@ -45,11 +45,17 @@ El color sí diverge. La mitad del board usa acentos saturados (verde lima, nara
 - Junto a cada resultado va una flecha de tendencia (↓ -30%), como en un informe de impacto. (source: images/1115063189023234275.jpg)
 - Un porcentaje se dibuja como una matriz de puntos (100 puntos, con la proporción llena) y "x de 10" como 10 puntos. (source: images/1115063189023266945.jpg, images/1115063189023236551.jpg, images/1115063189023236518.jpg)
 
+### Flujo conectado (página de software a medida)
+- Unos nodos en círculo unidos por una línea fina horizontal, con una etiqueta debajo de cada uno, cuentan el trabajo como una cadena. ([PlayerZero](https://app.notion.com/p/40-Mobility-Presentation-Templates-to-Streamline-Your-Professional-Projects-3a3136d2353f807c8367f4a5cd696e9e/?framer-gallery-playerzero))
+### Encabezado fijo con lista
+- El encabezado de la sección va a la izquierda y la lista de puntos a la derecha, en filas sobre hairlines. ([Miros](https://www.temlis.com/templates/miros?utm_source=organic&utm_medium=pinterest), [Portfolio templates](https://www.sitebuilderreport.com/graphic-design-portfolio-website-templates))
+
 ## States
 - La evidencia es escasa: los pins son estáticos. Solo se ve el estado activo de una columna (más ancha). ([Metrium](https://dribbble.com/shots/19133524-Metrium-Landing-Page-UI))
 - Hay loaders (círculo, puntos, reloj), pero de UI de app, no de sitio web. (source: images/1115063189023241063.jpg)
 
 ## Motion & micro-interactions
+- Sin confirmar, conviene revisar la fuente: el pulso que recorre la línea del flujo es una lectura propia del diagrama de PlayerZero, porque el pin es una imagen fija.
 - Sin confirmar, conviene revisar la fuente: la expansión de columnas al hacer hover se deduce del layout de Metrium, porque el pin es una imagen fija.
 - La descripción del pin de PlayerZero menciona "testimonials, grid layouts" y no habla de movimiento.
 

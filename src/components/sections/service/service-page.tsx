@@ -7,9 +7,12 @@ import { getCopy, getLang } from "@/content";
 import type { ServicePageCopy } from "@/content/schema";
 import { anchors } from "@/lib/anchors";
 import { href, type RouteKey } from "@/lib/routes";
+import type { LucideIcon } from "lucide-react";
+import { BuildFlow } from "./build-flow";
 import { FeatureGrid } from "./feature-grid";
 import { Highlight } from "./highlight";
 import { Models } from "./models";
+import { ProblemList } from "./problem-list";
 import { ProofStrip } from "./proof-strip";
 
 /*
@@ -22,11 +25,13 @@ export async function ServicePageView({
   copy,
   models = [],
   highlight,
+  flow,
 }: {
   route: RouteKey;
   copy: ServicePageCopy;
   models?: EngagementId[];
   highlight?: Target;
+  flow?: LucideIcon[];
 }) {
   const [lang, common, nav] = await Promise.all([getLang(), getCopy("services"), getCopy("nav")]);
   return (
@@ -35,15 +40,25 @@ export async function ServicePageView({
       <main id="main">
         <HeroView copy={copy.hero} href={href(route, lang, anchors.contact)} />
         {copy.problem && (
-          <FeatureGrid id="problem-title" title={copy.problem.title} lead={copy.problem.lead} items={copy.problem.points} />
+          <ProblemList id="problem-title" title={copy.problem.title} lead={copy.problem.lead} points={copy.problem.points} />
         )}
-        <FeatureGrid
-          id="includes-title"
-          title={copy.includes.title}
-          lead={copy.includes.lead}
-          items={copy.includes.items}
-          tone="subtle"
-        />
+        {flow ? (
+          <BuildFlow
+            id="includes-title"
+            title={copy.includes.title}
+            lead={copy.includes.lead}
+            items={copy.includes.items}
+            icons={flow}
+          />
+        ) : (
+          <FeatureGrid
+            id="includes-title"
+            title={copy.includes.title}
+            lead={copy.includes.lead}
+            items={copy.includes.items}
+            tone="subtle"
+          />
+        )}
         {copy.highlight && (
           <Highlight
             title={copy.highlight.title}

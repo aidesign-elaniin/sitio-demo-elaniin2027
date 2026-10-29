@@ -36,6 +36,7 @@ export default async function ServicePage({ params }: Props) {
       copy={services[service.route]}
       models={service.models}
       highlight={service.highlight}
+      flow={service.flow}
     />
   );
 }

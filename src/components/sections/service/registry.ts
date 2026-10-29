@@ -1,3 +1,4 @@
+import { AppWindow, Network, Server, ShieldCheck, type LucideIcon } from "lucide-react";
 import type { EngagementId, Target } from "@/components/sections/nav/nav-data";
 import type { PageRoute } from "@/content/schema";
 import { routes, type RouteKey } from "@/lib/routes";
@@ -13,6 +14,8 @@ export type ServiceEntry = {
   models: EngagementId[];
   /** Where the highlight block links, when it has a link. */
   highlight?: Target;
+  /** When "what's included" is a chain (architecture to QA): one icon per item, drawn as a connected flow. */
+  flow?: LucideIcon[];
 };
 
 export type Line = { route: PageRoute; copy: "software" | "cloud" | "ai"; services: ServiceEntry[] };
@@ -22,7 +25,12 @@ export const lines: Line[] = [
     route: "softwareDevelopment",
     copy: "software",
     services: [
-      { route: "customSoftware", models: ["projectDelivery", "dedicatedTeams"], highlight: { route: "appliedAi" } },
+      {
+        route: "customSoftware",
+        models: ["projectDelivery", "dedicatedTeams"],
+        highlight: { route: "appliedAi" },
+        flow: [Network, Server, AppWindow, ShieldCheck],
+      },
       { route: "appModernization", models: ["dedicatedTeams", "projectDelivery"] },
       { route: "mobileApps", models: ["projectDelivery", "staffAugmentation"] },
       { route: "softwareSupport", models: [] },
