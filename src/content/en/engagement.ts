@@ -22,6 +22,23 @@ export const engagement: EngagementCopy = {
       title: "Compare the models.",
       lead: { strong: "What changes from one to another.", rest: "If you are torn between two, the first call is for deciding." },
       criteria: ["What you get", "Who leads day to day", "Best for", "How it's measured"],
+      finder: {
+        title: "Find your model.",
+        questions: [
+          { label: "What are you missing today?", options: ["People for my roadmap", "A team for my product", "Someone to deliver the outcome"] },
+          { label: "Who leads day to day?", options: ["My team", "Shared", "Elaniin"] },
+          { label: "What does the horizon look like?", options: ["Sprints with a clear plan", "A product that keeps growing", "A goal with a date"] },
+        ],
+        hint: "Answer the three questions and the model that fits best is marked in the comparison.",
+        match: "{n}% match",
+        best: "Your best starting point",
+        view: "See the model",
+        reset: "Start over",
+        spectrum: { label: "Who leads day to day", start: "Your team", end: "Elaniin" },
+        tableTitle: "The detail, side by side.",
+        pick: "Mark",
+        picked: "Marked",
+      },
       rows: {
         staffAugmentation: [
           "Profiles that join your team",

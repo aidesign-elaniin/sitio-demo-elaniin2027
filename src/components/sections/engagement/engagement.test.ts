@@ -3,6 +3,7 @@ import { copy as en } from "@/content/en";
 import { copy as es } from "@/content/es";
 import { engagementItems } from "@/components/sections/nav/nav-data";
 import { routes } from "@/lib/routes";
+import { best, finderModels, matches } from "./finder-data";
 
 describe.each([
   ["en", en],
@@ -20,5 +21,19 @@ describe.each([
       expect(routes[m.id].en.startsWith(`${routes.engagementModels.en}/`)).toBe(true);
       expect(routes[m.id].es.startsWith(`${routes.engagementModels.es}/`)).toBe(true);
     }
+  });
+});
+
+describe("model finder", () => {
+  it("gives 100% to the model all three answers point to", () => {
+    finderModels.forEach((_, i) => {
+      expect(best([i, i, i])).toBe(i);
+      expect(matches([i, i, i])?.[i]).toBe(100);
+    });
+  });
+
+  it("scores only the questions answered and starts empty", () => {
+    expect(matches([null, null, null])).toBeNull();
+    expect(best([2, null, null])).toBe(2);
   });
 });

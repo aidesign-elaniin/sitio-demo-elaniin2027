@@ -22,6 +22,23 @@ export const engagement: EngagementCopy = {
       title: "Compara los modelos.",
       lead: { strong: "Lo que cambia entre uno y otro.", rest: "Si dudas entre dos, la llamada inicial sirve para decidir." },
       criteria: ["Qué recibes", "Quién dirige el día a día", "Ideal para", "Cómo se mide"],
+      finder: {
+        title: "Encuentra tu modelo.",
+        questions: [
+          { label: "¿Qué te falta hoy?", options: ["Gente para mi roadmap", "Un equipo para mi producto", "Alguien que entregue el resultado"] },
+          { label: "¿Quién dirige el día a día?", options: ["Mi equipo", "Compartido", "Elaniin"] },
+          { label: "¿Cómo es el horizonte?", options: ["Sprints con un plan claro", "Un producto que sigue creciendo", "Un objetivo con fecha"] },
+        ],
+        hint: "Responde las tres preguntas y el modelo que mejor encaja se marca en la comparación.",
+        match: "{n}% de coincidencia",
+        best: "Tu mejor punto de partida",
+        view: "Ver el modelo",
+        reset: "Empezar de nuevo",
+        spectrum: { label: "Quién dirige el día a día", start: "Tu equipo", end: "Elaniin" },
+        tableTitle: "El detalle, lado a lado.",
+        pick: "Marcar",
+        picked: "Marcado",
+      },
       rows: {
         staffAugmentation: [
           "Perfiles que se integran a tu equipo",

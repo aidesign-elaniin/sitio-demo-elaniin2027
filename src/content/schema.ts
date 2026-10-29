@@ -215,11 +215,28 @@ export type ContactCopy = {
 
 export type EngagementModel = "staffAugmentation" | "dedicatedTeams" | "projectDelivery";
 
+/* Model finder of the comparison: three questions, three options each (option i points to model i), then the table. */
+export type FinderCopy = {
+  title: string;
+  questions: [FinderQuestion, FinderQuestion, FinderQuestion];
+  hint: string;
+  /** "{n}% de coincidencia" */
+  match: string;
+  best: string;
+  view: string;
+  reset: string;
+  spectrum: { label: string; start: string; end: string };
+  tableTitle: string;
+  pick: string;
+  picked: string;
+};
+type FinderQuestion = { label: string; options: [string, string, string] };
+
 export type EngagementCopy = {
   hub: {
     hero: HeroCopy;
     intro: SectionHead;
-    comparison: SectionHead & { criteria: string[]; rows: Record<EngagementModel, string[]> };
+    comparison: SectionHead & { criteria: string[]; rows: Record<EngagementModel, string[]>; finder: FinderCopy };
   };
   models: Record<EngagementModel, ServicePageCopy>;
 };
