@@ -81,7 +81,7 @@ export function EngagementMenu({ lang, copy, onNavigate }: { lang: Lang; copy: N
                   <span
                     aria-hidden="true"
                     className={cn(
-                      "grid grid-cols-8 gap-2.5 rounded-menu p-4",
+                      "grid w-fit grid-cols-8 gap-2 rounded-menu p-3",
                       m.id === "projectDelivery" ? "border border-dashed border-border-strong" : "border border-transparent",
                     )}
                   >
@@ -92,7 +92,7 @@ export function EngagementMenu({ lang, copy, onNavigate }: { lang: Lang; copy: N
                           key={i}
                           style={{ transitionDelay: `${delay}ms` }}
                           className={cn(
-                            "aspect-square rounded-full transition-[background-color,transform] duration-300 ease-emphasized motion-reduce:transition-none",
+                            "size-2.5 rounded-full transition-[background-color,transform] duration-300 ease-emphasized motion-reduce:transition-none",
                             who === "o" &&
                               (dark
                                 ? "bg-text-on-dark group-hover/item:scale-110 group-hover/item:bg-text-on-dark-accent group-focus-visible/item:bg-text-on-dark-accent"

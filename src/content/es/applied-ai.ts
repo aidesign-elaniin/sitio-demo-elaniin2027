@@ -106,4 +106,8 @@ export const appliedAi: AppliedAiCopy = {
     note: "Demostración con contenido de ejemplo. Ninguna sugerencia llega a producción sin una persona.",
   },
   capacity: { one: "Un equipo", many: "El mismo equipo con IA" },
+  pictures: {
+    loop: { ai: "IA", person: "Persona", ship: "Entrega", back: "Vuelve con cambios" },
+    sheets: ["Documentación", "Pruebas", "Prototipo"],
+  },
 };

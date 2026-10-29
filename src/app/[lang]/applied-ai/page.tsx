@@ -28,7 +28,7 @@ export default async function AppliedAi() {
       <Nav route="appliedAi" />
       <main id="main">
         <AiHero copy={copy.hero} href={href("appliedAi", lang, anchors.contact)} />
-        <Pillars copy={copy.pillars} capacity={copy.capacity} />
+        <Pillars copy={copy.pillars} capacity={copy.capacity} pictures={copy.pictures} />
         <LoopDemo copy={copy.loop} />
         <InServices copy={copy.services} lang={lang} />
         <Evidence copy={copy.evidence} lang={lang} />

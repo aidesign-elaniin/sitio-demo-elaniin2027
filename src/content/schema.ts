@@ -275,6 +275,8 @@ export type AppliedAiCopy = {
   };
   /** The capacity pillar's picture: one team, then the same team with AI. */
   capacity: { one: string; many: string };
+  /** Labels inside the pillar pictures: the loop's lanes and the three extra deliverables. */
+  pictures: { loop: { ai: string; person: string; ship: string; back: string }; sheets: [string, string, string] };
 };
 
 type LoopTask = { label: string; draft: string; revised: string };

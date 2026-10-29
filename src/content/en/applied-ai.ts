@@ -106,4 +106,8 @@ export const appliedAi: AppliedAiCopy = {
     note: "Demo with sample content. No suggestion reaches production without a person.",
   },
   capacity: { one: "One team", many: "The same team with AI" },
+  pictures: {
+    loop: { ai: "AI", person: "Person", ship: "Ships", back: "Back with changes" },
+    sheets: ["Documentation", "Tests", "Prototype"],
+  },
 };
