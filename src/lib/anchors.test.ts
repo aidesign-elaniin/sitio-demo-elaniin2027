@@ -15,7 +15,7 @@ describe("anchors", () => {
   it("uses English, unique ids", () => {
     const values = Object.values(anchors);
     expect(new Set(values).size).toBe(values.length);
-    expect(anchors).toEqual({ home: "home", solutions: "solutions", cases: "cases", research: "research", contact: "contact" });
+    expect(anchors).toEqual({ home: "home", routes: "routes", solutions: "solutions", engagement: "engagement", method: "method", cases: "cases", research: "research", contact: "contact" });
   });
 
   it("leaves no Spanish anchor id in the source", () => {

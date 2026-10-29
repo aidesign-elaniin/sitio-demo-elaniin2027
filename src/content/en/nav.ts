@@ -1,13 +1,24 @@
 import type { NavCopy } from "../schema";
+import { cases } from "./cases";
+import { engagement } from "./engagement";
 
-/* Dummy copy. Translation of the Spanish sample content; the real copy arrives with the real content. Structure from the primary nav of docs/sitemap-elaniin.md. */
+/* The sample cases of the featured cards come from the cases dictionary, so the text cannot drift. */
+const featured = (id: "delivery-tracking" | "sme-payments") => ({
+  title: cases.items[id].title,
+  action: cases.read,
+  metric: cases.items[id].sector,
+});
+
+/* Dummy copy. Translation of the Spanish sample content; the real copy arrives with the real content. */
 export const nav: NavCopy = {
   homeAria: "Elaniin, home",
   mobileNavLabel: "Mobile main",
-  cta: "Contact us",
+  cta: "Start a project",
+  blog: "Blog",
   menu: { open: "Open menu", close: "Close menu" },
   plain: { appliedAi: "Applied AI" },
   solutions: {
+    all: "All solutions",
     trigger: "Solutions",
     items: {
       software: {
@@ -27,49 +38,45 @@ export const nav: NavCopy = {
       },
     },
     help: {
-      question: "Applied AI is not a separate service: it is how we deliver all three.",
-      action: "Discover Applied AI",
+      question: "Not sure where to start? Tell us the problem and we'll map the way.",
+      action: "Talk to the team",
     },
-    all: "All solutions",
   },
   engagement: {
     trigger: "Engagement models",
-    heading: "Choose how we work together",
     items: {
-      staffAugmentation: { title: "Staff augmentation", description: "Profiles that join your team and your roadmap" },
-      dedicatedTeams: { title: "Dedicated teams", description: "A full team focused on your product" },
-      projectDelivery: { title: "Project delivery", description: "A closed outcome, with discovery as phase 0" },
+      staff: {
+        title: "Staff augmentation",
+        description: "Senior engineers who join your team and work with your process.",
+      },
+      dedicated: {
+        title: "Dedicated teams",
+        description: "A full team for your product, managed by Elaniin or by you.",
+      },
+      project: {
+        title: "Project delivery",
+        description: "Defined scope, date and price, delivered from start to finish.",
+      },
     },
+    visuals: engagement.visuals,
     help: {
-      question: "Not sure which model fits you?",
-      action: "Compare models",
+      question: "Not sure which model fits? Tell us your situation and we'll recommend one.",
+      action: "Talk to the team",
     },
-    scale: { yours: "Your team", ours: "Elaniin" },
   },
   resources: {
     trigger: "Resources",
-    explore: {
-      heading: "Explore Elaniin",
-      items: {
-        useCases: { title: "Use cases", description: "Client cases by industry" },
-        research: { title: "Research", description: "What we study and publish" },
-      },
-    },
-    latest: {
-      heading: "Latest articles",
-      items: {
-        insights: { title: "Insights", description: "Ideas on product and engineering" },
-        playbook: { title: "Delivery playbook", description: "How we ship every week" },
-        aiReport: { title: "AI report", description: "What works and what doesn't in operations" },
-      },
+    items: {
+      cases: { title: "Cases", description: "Results that are measured" },
+      research: { title: "Our research", description: "What we study and publish" },
+      hub: { title: "All resources", description: "Cases, research and articles" },
     },
     featured: {
       heading: "Featured cases",
       subtitle: "Results that are measured",
       cards: [
-        { tag: "Logistics", title: "Delivery tracking", metric: "-42% response time" },
-        { tag: "Fintech", title: "Payments for small businesses", metric: "3x conversion" },
-        { tag: "Applied AI", title: "Support assistant", metric: "+35% tickets per agent" },
+        { ...featured("delivery-tracking"), scene: cases.scenes.shipment },
+        { ...featured("sme-payments"), scene: cases.scenes.signup },
       ],
     },
   },

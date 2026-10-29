@@ -3,8 +3,8 @@ import {
   ctaTarget,
   engagementItems,
   engagementTarget,
-  exploreItems,
   plainLinks,
+  resourceItems,
   resourcesTarget,
   solutions,
   solutionsTarget,
@@ -25,9 +25,9 @@ export const footerColumns: Target[][] = [
   engagementItems.map((i) => i.to),
   // Industrias: public sector, financial services, restaurants, retail (their ids are their route keys)
   industryIds.map((route) => ({ route })),
-  // Recursos: use cases, research, contact
-  [...exploreItems.map((i) => i.to), ctaTarget],
+  // Recursos: use cases, research, contact, status, report an issue (the last two are not in the closed legal row)
+  [...resourceItems.filter((i) => i.id !== "hub").map((i) => i.to), ctaTarget, { route: "status" }, { route: "reportIssue" }],
 ];
 
-/** The legal row, in the order of its labels: Legal, Privacy, Status, Report an issue. */
-export const legalRoutes = ["legal", "privacy", "status", "reportIssue"] as const;
+/** The legal row, in the order of its labels: Legal, Privacy (DESIGN.md components.footer, a closed list). */
+export const legalRoutes = ["legal", "privacy"] as const;

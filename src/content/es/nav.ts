@@ -1,13 +1,24 @@
 import type { NavCopy } from "../schema";
+import { cases } from "./cases";
+import { engagement } from "./engagement";
 
-/* Contenido de ejemplo. Estructura según el nav primario de docs/sitemap-elaniin.md. */
+/* Los casos reales de la tarjeta destacada salen del diccionario de casos, para que el texto no se separe. */
+const featured = (id: "delivery-tracking" | "sme-payments") => ({
+  title: cases.items[id].title,
+  action: cases.read,
+  metric: cases.items[id].sector,
+});
+
+/* Contenido de ejemplo. */
 export const nav: NavCopy = {
   homeAria: "Elaniin, inicio",
   mobileNavLabel: "Principal móvil",
-  cta: "Contáctanos",
+  cta: "Inicia un proyecto",
+  blog: "Blog",
   menu: { open: "Abrir menú", close: "Cerrar menú" },
   plain: { appliedAi: "Applied AI" },
   solutions: {
+    all: "Todas las soluciones",
     trigger: "Soluciones",
     items: {
       software: {
@@ -27,49 +38,45 @@ export const nav: NavCopy = {
       },
     },
     help: {
-      question: "Applied AI no es un servicio aparte: es cómo entregamos los tres frentes.",
-      action: "Conocer Applied AI",
+      question: "¿No sabes por dónde empezar? Cuéntanos el problema y armamos el camino.",
+      action: "Hablar con el equipo",
     },
-    all: "Todas las soluciones",
   },
   engagement: {
-    trigger: "Modelos de contratación",
-    heading: "Elige cómo trabajamos juntos",
+    trigger: "Modelos de trabajo",
     items: {
-      staffAugmentation: { title: "Aumento de equipo", description: "Perfiles que se suman a tu equipo y a tu roadmap" },
-      dedicatedTeams: { title: "Equipos dedicados", description: "Un equipo completo enfocado en tu producto" },
-      projectDelivery: { title: "Entrega de proyectos", description: "Un resultado cerrado, con discovery como fase 0" },
+      staff: {
+        title: "Staff augmentation",
+        description: "Ingenieros senior que se integran a tu equipo y trabajan con tu proceso.",
+      },
+      dedicated: {
+        title: "Equipos dedicados",
+        description: "Un equipo completo para tu producto, gestionado por Elaniin o por ti.",
+      },
+      project: {
+        title: "Proyectos llave en mano",
+        description: "Alcance, fecha y precio definidos, entregados de principio a fin.",
+      },
     },
+    visuals: engagement.visuals,
     help: {
-      question: "¿No sabes qué modelo te conviene?",
-      action: "Comparar modelos",
+      question: "¿No sabes qué modelo te conviene? Cuéntanos tu situación y te recomendamos uno.",
+      action: "Hablar con el equipo",
     },
-    scale: { yours: "Tu equipo", ours: "Elaniin" },
   },
   resources: {
     trigger: "Recursos",
-    explore: {
-      heading: "Explora Elaniin",
-      items: {
-        useCases: { title: "Casos de uso", description: "Casos de clientes por industria" },
-        research: { title: "Investigaciones", description: "Lo que estudiamos y publicamos" },
-      },
-    },
-    latest: {
-      heading: "Últimos artículos",
-      items: {
-        insights: { title: "Insights", description: "Ideas sobre producto e ingeniería" },
-        playbook: { title: "Playbook de entregas", description: "Cómo entregamos cada semana" },
-        aiReport: { title: "Informe de IA", description: "Qué funciona y qué no en operaciones" },
-      },
+    items: {
+      cases: { title: "Casos", description: "Resultados que se miden" },
+      research: { title: "Nuestras investigaciones", description: "Lo que estudiamos y publicamos" },
+      hub: { title: "Todos los recursos", description: "Casos, investigación y artículos" },
     },
     featured: {
       heading: "Casos destacados",
       subtitle: "Resultados que se miden",
       cards: [
-        { tag: "Logística", title: "Seguimiento de entregas", metric: "-42% tiempo de atención" },
-        { tag: "Fintech", title: "Pagos para pymes", metric: "3x conversión" },
-        { tag: "IA aplicada", title: "Asistente de soporte", metric: "+35% tickets por agente" },
+        { ...featured("delivery-tracking"), scene: cases.scenes.shipment },
+        { ...featured("sme-payments"), scene: cases.scenes.signup },
       ],
     },
   },

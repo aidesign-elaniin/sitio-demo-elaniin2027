@@ -188,7 +188,7 @@ export function SolutionDialog({
             )}
           >
             <SolutionSurface look={LOOKS[item.id]} />
-            <SolutionVisual id={item.id} copy={copy.visuals} lang={lang} size="fill" bare />
+            <SolutionVisual id={item.id} copy={copy.visuals} size="fill" bare />
           </div>
         </div>
       </motion.div>

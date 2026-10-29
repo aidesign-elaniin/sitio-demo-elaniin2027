@@ -1,31 +1,38 @@
 import type { FooterCopy } from "../schema";
 
-/* Dummy copy. */
+/* Brand line, columns, entity line and legal supplied by the team (2026-10-27). The badge names are read from the badges. */
 export const footer: FooterCopy = {
   navLabel: "Footer",
   socialsLabel: "Social media",
   tagline: {
-    lead: "Software that keeps demanding teams running.",
-    rest: "You focus on the business, not on the technology.",
+    lead: "Make complexity work.",
+    rest: "Intelligent software your business runs on.",
   },
-  newsletter: {
-    first: "First name",
-    last: "Last name",
-    email: "Email address",
-    submit: "Stay in the loop",
-    sending: "Sending…",
-    legal: "By submitting this form you accept our {terms}. You can unsubscribe at any time.",
-    terms: "terms",
-    success: "Done. We'll write to you soon with news from Elaniin.",
-    invalidEmail: "Enter a valid email so we can write to you.",
+  entity: "Intelligent software company since 2014",
+  aiSummary: {
+    label: "Get an AI summary of Elaniin:",
+    prompt: "Summarize what Elaniin does, its services and how it works, based on {url}",
+    opensIn: "(opens in a new tab)",
   },
   columns: [
     { heading: "Solutions", links: ["Software development", "AI solutions", "Cloud", "Applied AI"] },
     { heading: "Engagement models", links: ["Staff augmentation", "Dedicated teams", "Project delivery"] },
     { heading: "Industries", links: ["Public sector", "Financial services", "Restaurants", "Retail"] },
-    { heading: "Resources", links: ["Use cases", "Research", "Contact"] },
+    { heading: "Resources", links: ["Use cases", "Research", "Contact", "Status", "Report an issue"] },
   ],
-  legal: ["Legal", "Privacy", "Status", "Report an issue"],
-  copyright: "© 2027 elaniin",
-  placeholder: "Sample content to validate the design system.",
+  credentials: {
+    label: "Our certifications",
+    items: {
+      aws: "AWS Partner, Premier Tier Services",
+      google: "Google Cloud Partner",
+      webflow: "Webflow Professional Partner",
+      clutchGlobal: "Clutch Global",
+      clutchSoftware: "Clutch Top Software Developers, El Salvador",
+      clutchStaff: "Clutch Top Staff Augmentation Company, El Salvador",
+      gptw: "Great Place to Work, El Salvador",
+      claude: "Claude Certified Services Partner",
+    },
+  },
+  legal: ["Legal", "Privacy"],
+  copyright: "© 2027 Elaniin",
 };

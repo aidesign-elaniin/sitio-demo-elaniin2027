@@ -2,7 +2,7 @@ import { Cta } from "@/components/sections/cta/cta";
 import { Footer } from "@/components/sections/footer/footer";
 import { HeroView } from "@/components/sections/hero/hero";
 import { Nav } from "@/components/sections/nav/nav";
-import { resolveTarget, type EngagementId, type Target } from "@/components/sections/nav/nav-data";
+import { resolveTarget, type EngagementModel, type Target } from "@/components/sections/nav/nav-data";
 import { getCopy, getLang } from "@/content";
 import type { ServicePageCopy } from "@/content/schema";
 import { anchors } from "@/lib/anchors";
@@ -32,7 +32,7 @@ export async function ServicePageView({
 }: {
   route: RouteKey;
   copy: ServicePageCopy;
-  models?: EngagementId[];
+  models?: EngagementModel[];
   highlight?: Target;
   flow?: LucideIcon[];
 }) {

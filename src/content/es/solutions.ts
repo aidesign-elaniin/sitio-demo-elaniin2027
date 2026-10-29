@@ -1,76 +1,68 @@
 import type { SolutionsCopy } from "../schema";
 
-/* Contenido de ejemplo. */
+/*
+  Texto entregado por el equipo (2026-10-27), acortado al presupuesto de caracteres de las tarjetas (DESIGN.md
+  components.solutions-grid): un titular de unos 25 caracteres y un resto de unos 100. Las frases completas viven en el
+  diálogo (intro) y la llamada a la acción solo en el diálogo.
+*/
 export const solutions: SolutionsCopy = {
-  title: "Tres frentes, un solo equipo.",
+  title: "Software construido con IA desde la primera línea.",
   lead: {
-    strong: "Producto, inteligencia y nube se resuelven juntos.",
-    rest: "Así el software no se rompe entre áreas ni entre proveedores.",
+    strong: "Usamos IA en cada proyecto.",
+    rest: "Tus liberaciones llegan con menos errores y tu software queda listo para crecer.",
   },
   card: { details: "Ver detalle de {title}" },
   dialog: { close: "Cerrar detalle", talk: "Hablar con el equipo" },
   items: {
+    ai: {
+      name: "AI delivery",
+      lead: "IA en todo el proceso.",
+      rest: "Usamos IA para programar, revisar, probar y monitorear; cada decisión tiene el nombre de una persona.",
+      title: "AI delivery",
+      intro:
+        "Nuestros ingenieros usan IA para leer código heredado, programar, revisar, probar cada liberación y monitorear producción. Cada decisión sigue teniendo el nombre de una persona detrás.",
+      bullets: [
+        { title: "Leer código heredado", text: "Entendemos qué hace un sistema antes de tocarlo." },
+        { title: "Programar y revisar", text: "La IA propone, un ingeniero decide y firma." },
+        { title: "Probar y monitorear", text: "Cada liberación se prueba y se vigila en producción." },
+      ],
+      metrics: [{ label: "revisión de código más rápida" }, { label: "decisiones firmadas por una persona" }],
+      cta: "Conoce AI delivery",
+    },
     software: {
       name: "Software",
-      lead: "Desarrollo de software.",
-      rest: "Productos web, móviles y plataformas a medida, entregados cada semana en un entorno real.",
-      title: "Desarrollo de software",
-      intro:
-        "Equipos de producto, diseño e ingeniería que entregan cada semana en un entorno real, con medición desde el primer día.",
+      lead: "Creamos y modernizamos.",
+      rest: "Productos nuevos y los sistemas de los que ya depende tu operación, al día.",
+      title: "Desarrollo y modernización de software",
+      intro: "Creamos productos nuevos y modernizamos los sistemas de los que ya depende tu operación.",
       bullets: [
         { title: "Web y móvil", text: "Aplicaciones que la gente usa de verdad, no prototipos." },
         { title: "Plataformas a medida", text: "Sistemas internos que reemplazan hojas de cálculo y procesos manuales." },
-        { title: "Integraciones y APIs", text: "Conectamos lo que ya tienes sin reescribirlo." },
+        { title: "Modernización de sistemas", text: "Actualizamos lo que ya usas sin detener la operación." },
       ],
       metrics: [{ label: "del commit a producción" }, { label: "cobertura de pruebas" }],
-      cta: "Ver desarrollo de software",
-    },
-    ai: {
-      name: "IA",
-      lead: "IA aplicada.",
-      rest: "Asistentes y automatizaciones con casos de uso acotados y revisión humana en cada paso.",
-      title: "IA aplicada",
-      intro: "Casos de uso acotados, con datos reales y revisión humana donde importa.",
-      bullets: [
-        { title: "Asistentes y agentes", text: "Respuestas sugeridas a partir de tu base de conocimiento." },
-        { title: "Automatización de procesos", text: "Tareas repetitivas resueltas de punta a punta." },
-        { title: "Evaluación y gobierno", text: "Medimos la calidad y dejamos reglas claras de uso." },
-      ],
-      metrics: [{ label: "tickets resueltos por agente" }, { label: "respuestas con revisión humana" }],
-      cta: "Ver IA aplicada",
+      cta: "Conoce desarrollo de software",
     },
     cloud: {
       name: "Cloud",
-      lead: "Cloud sin fricción.",
-      rest: "Infraestructura que escala sola, cerca de tus usuarios y con los costos bajo control.",
+      lead: "Para tu demanda real.",
+      rest: "Diseñamos, migramos y operamos tu infraestructura, con costos visibles.",
       title: "Cloud",
-      intro: "Infraestructura que escala sola, cerca de tus usuarios y con los costos bajo control.",
+      intro:
+        "Diseñamos, migramos y operamos tu infraestructura en el proveedor cloud que mejor se adapta a tu negocio, dimensionada para tu demanda real y con costos visibles.",
       bullets: [
         { title: "Migración a la nube", text: "Sin pausas largas ni sorpresas en la factura." },
         { title: "Arquitectura y DevOps", text: "Despliegues repetibles y entornos por cada cambio." },
         { title: "Datos, seguridad y costos", text: "Alertas y límites de gasto desde el primer día." },
       ],
       metrics: [{ label: "disponibilidad" }, { label: "costo de infraestructura" }],
-      cta: "Ver cloud",
+      cta: "Conoce cloud",
     },
   },
   units: { minutes: "min" },
   visuals: {
-    software: {
-      steps: [
-        { label: "Pruebas", meta: "82% cobertura" },
-        { label: "Revisión", meta: "2 aprobaciones" },
-        { label: "Staging", meta: "3 min" },
-        { label: "Producción", meta: "14 min" },
-      ],
-      status: { running: "En curso", done: "Listo" },
-    },
-    ai: {
-      question: "¿Cuántos pedidos siguen pendientes de pago esta semana?",
-      answer: "Hay 18 pedidos pendientes y 11 llevan más de 48 horas. ¿Envío un recordatorio automático?",
-      confirm: "Sí, enviar",
-      orders: "Ver pedidos",
-    },
-    cloud: { availability: "Disponibilidad", regions: "3 regiones" },
+    delivery: { steps: ["Pruebas", "Revisión", "Staging", "Producción"] },
+    product: { platform: "Plataforma", web: "App web", mobile: "Móvil" },
+    cloud: { availability: "Disponibilidad" },
   },
 };

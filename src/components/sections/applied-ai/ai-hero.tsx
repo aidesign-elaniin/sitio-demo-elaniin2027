@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { HeroCopy } from "@/content/schema";
+import type { PageHeroCopy } from "@/content/schema";
 import { AiField } from "./ai-field";
 
 /*
@@ -8,7 +8,7 @@ import { AiField } from "./ai-field";
   living halftone field (AiField) on the right, the headline on the left entering word by word, and a block caret that
   blinks after the last word, as if the model were still writing. One white button.
 */
-export function AiHero({ copy, href }: { copy: HeroCopy; href: string }) {
+export function AiHero({ copy, href }: { copy: PageHeroCopy; href: string }) {
   const words = copy.headline.split(" ");
   return (
     <section className="relative isolate overflow-hidden bg-surface-dark text-text-on-dark">

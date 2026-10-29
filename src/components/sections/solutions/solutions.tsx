@@ -3,7 +3,7 @@ import { getCopy, getLang } from "@/content";
 import { SolutionsGrid } from "./solutions-grid";
 import { anchors } from "@/lib/anchors";
 
-/* Section 04. Header, then three cards (one per solution line, each with its own look) with animated mocks. */
+/* Section 05. Header, then three cards (one per solution line, each with its own look) with animated mocks. */
 export async function Solutions() {
   const [lang, copy] = await Promise.all([getLang(), getCopy("solutions")]);
   return (

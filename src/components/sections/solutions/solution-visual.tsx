@@ -1,8 +1,7 @@
 import type { SolutionsCopy } from "@/content/schema";
-import type { Lang } from "@/lib/i18n";
-import { AssistantVisual } from "./assistant-visual";
 import { CloudVisual } from "./cloud-visual";
 import { DeliveryVisual } from "./delivery-visual";
+import { ProductVisual } from "./product-visual";
 import type { SolutionId } from "./solutions-data";
 import type { VisualSize } from "./visual-panel";
 
@@ -10,17 +9,16 @@ import type { VisualSize } from "./visual-panel";
 export function SolutionVisual({
   id,
   copy,
-  lang,
   size,
   bare,
 }: {
   id: SolutionId;
   copy: SolutionsCopy["visuals"];
-  lang: Lang;
   size?: VisualSize;
   bare?: boolean;
 }) {
-  if (id === "software") return <DeliveryVisual copy={copy.software} size={size} bare={bare} />;
-  if (id === "ai") return <AssistantVisual copy={copy.ai} size={size} bare={bare} />;
-  return <CloudVisual copy={copy.cloud} lang={lang} size={size} bare={bare} />;
+  // Isometric resources: AI delivery is a pipeline crossed by one pulse; software is a product built tier by tier.
+  if (id === "ai") return <DeliveryVisual copy={copy.delivery} size={size} bare={bare} />;
+  if (id === "software") return <ProductVisual copy={copy.product} size={size} bare={bare} />;
+  return <CloudVisual copy={copy.cloud} size={size} bare={bare} />;
 }

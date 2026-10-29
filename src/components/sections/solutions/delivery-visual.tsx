@@ -1,123 +1,111 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useInView, useReducedMotion } from "motion/react";
-import { StatusBadge } from "@/components/ui/status-badge";
+import { useId } from "react";
+import { FlaskConical, GitPullRequest, Layers, Rocket } from "lucide-react";
+import { clamp01, pointsAttr, project, SCENE_W } from "@/components/ui/iso/iso";
+import { IsoPill, pillLength } from "@/components/ui/iso/pill";
+import { HaloFilter, IsoPulse } from "@/components/ui/iso/pulse";
+import { Slab, type SlabBox, topFace } from "@/components/ui/iso/slab";
 import type { DeliveryVisualCopy } from "@/content/schema";
 import { cn } from "@/lib/cn";
-import { duration, ease } from "@/lib/motion";
-import { blue } from "@/lib/tokens";
+import { useClock } from "@/lib/use-clock";
 import { VisualPanel, type VisualSize } from "./visual-panel";
 
-/* Software card: a delivery pipeline that completes step by step, then loops while it is in view. */
-type StepState = "idle" | "active" | "done";
+/*
+  AI delivery card (DESIGN.md components.solutions-grid, mocks): the pipeline as four glass strips side by side, one per
+  stage, each with a pill. One pulse crosses the front edge of the base from the first strip to the last; every strip lights
+  its top edge in Elevate Blue and its pill shows the check as the pulse passes. The last one holds, then the loop fades out
+  and restarts. Under prefers-reduced-motion the scene rests on the finished pipeline.
+*/
+const ICONS = [FlaskConical, GitPullRequest, Layers, Rocket];
+const STRIP = 46;
+const GAP = 12;
+const H = 12;
+const O = { x: 206, y: 40 };
+const T = { start: 700, travel: 4600, reset: 8200, loop: 9000, rest: 6200 };
 
-function StepIcon({ state }: { state: StepState }) {
+export function DeliveryVisual({
+  copy,
+  size = "card",
+  bare = false,
+}: {
+  copy: DeliveryVisualCopy;
+  size?: VisualSize;
+  bare?: boolean;
+}) {
+  const haloId = useId();
+  const { ref, t } = useClock(T.loop, 50, T.rest);
+  const fade = 1 - clamp01((t - T.reset) / (T.loop - T.reset));
+
+  const length = Math.max(...copy.steps.map((s) => pillLength(s, true)));
+  const depth = length + 20;
+  const plateW = copy.steps.length * STRIP + (copy.steps.length - 1) * GAP + 24;
+  const plate: SlabBox = { x: -12, y: -12, z: 0, w: plateW, d: depth + 44, h: 10 };
+  const laneY = depth + 16;
+  const laneFrom = -8;
+  const laneTo = plateW - 16;
+
+  const strips = copy.steps.map((name, i) => {
+    const x = i * (STRIP + GAP);
+    const box: SlabBox = { x, y: 0, z: plate.h, w: STRIP, d: depth, h: H };
+    const center = x + STRIP / 2;
+    const at = T.start + ((center - laneFrom) / (laneTo - laneFrom)) * T.travel;
+    const done = clamp01((t - at) / 350) * fade;
+    return { name, box, center, done, flash: t < at ? 0 : clamp01(1 - (t - at) / 500) * fade };
+  });
+
+  const pulseX = laneFrom + clamp01((t - T.start) / T.travel) * (laneTo - laneFrom);
+  const pulse = project({ x: pulseX, y: laneY, z: plate.h }, O);
+  const pulseOpacity = clamp01((t - T.start + 200) / 300) * clamp01((T.start + T.travel + 600 - t) / 500) * fade;
+
   return (
-    <span className="relative grid size-5 shrink-0 place-items-center">
-      <span
-        className={cn(
-          "absolute inset-0 rounded-full border transition-colors duration-200 ease-standard",
-          state === "done" ? "border-success-dot bg-success-dot" : "border-border-strong bg-white",
-        )}
-      />
-      {state === "active" && (
-        <motion.svg
-          viewBox="0 0 20 20"
-          className="absolute inset-0 size-5"
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, ease: "linear", duration: 0.9 }}
-        >
-          <path d="M10 1.5a8.5 8.5 0 0 1 8.5 8.5" fill="none" stroke={blue[500]} strokeWidth="2" strokeLinecap="round" />
-        </motion.svg>
-      )}
-      {state === "done" && (
-        <svg viewBox="0 0 20 20" className="relative size-5">
-          <motion.path
-            d="M6 10.5l2.8 2.8L14 7.8"
-            fill="none"
-            stroke="#fff"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: 1 }}
-            transition={{ duration: duration.slow, ease: ease.emphasized }}
-          />
+    <VisualPanel size={size} bare={bare} className="p-2 max-md:p-2">
+      <div ref={ref} className={cn("w-full", size === "fill" ? "max-w-[460px]" : "max-w-[320px] lg:max-w-none")}>
+        <svg viewBox={`0 8 ${SCENE_W} 268`} className="block h-auto w-full" focusable="false">
+          <defs>
+            <HaloFilter id={haloId} />
+          </defs>
+          <g className="iso-levitate">
+            <Slab look="dark" box={plate} o={O} />
+
+            {strips.map((s) => (
+              <g key={s.name}>
+                <Slab look="dark" box={s.box} o={O} />
+                {s.done > 0 && (
+                  <polygon
+                    points={pointsAttr(topFace(s.box), O)}
+                    style={{
+                      fill: "none",
+                      stroke: "var(--color-elevate-blue)",
+                      strokeWidth: 1.5 + s.flash,
+                      strokeLinejoin: "round",
+                      opacity: s.done,
+                    }}
+                  />
+                )}
+              </g>
+            ))}
+
+            {/* The strip nearest the viewer is drawn last, so its pill is never covered. */}
+            {strips.map((s, i) => (
+              <IsoPill
+                key={s.name}
+                o={O}
+                z={plate.h + H}
+                cx={s.center}
+                cy={depth / 2}
+                name={s.name}
+                icon={ICONS[i]}
+                index={i}
+                length={length}
+                check={s.done}
+                lit={s.flash}
+              />
+            ))}
+
+            <IsoPulse x={pulse.x} y={pulse.y} opacity={pulseOpacity} haloId={haloId} />
+          </g>
         </svg>
-      )}
-    </span>
-  );
-}
-
-export function DeliveryVisual({ copy, size = "card", bare = false }: { copy: DeliveryVisualCopy; size?: VisualSize; bare?: boolean }) {
-  const steps = copy.steps;
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { amount: 0.5 });
-  const reduce = useReducedMotion();
-  const [step, setStep] = useState(0);
-
-  useEffect(() => {
-    if (reduce || !inView) return;
-    let n = 0;
-    let timer: ReturnType<typeof setTimeout>;
-    const tick = () => {
-      setStep(n);
-      if (n < steps.length) {
-        n += 1;
-        timer = setTimeout(tick, 900);
-      } else {
-        n = 0;
-        timer = setTimeout(tick, 2800); // hold the finished state, then restart
-      }
-    };
-    timer = setTimeout(tick, 400);
-    return () => clearTimeout(timer);
-  }, [inView, reduce, steps.length]);
-
-  const done = reduce ? steps.length : step;
-  const finished = done >= steps.length;
-
-  return (
-    <VisualPanel size={size} bare={bare}>
-      <div ref={ref} className="w-full max-w-sm rounded-menu border border-border-default bg-white p-4 shadow-card-rest">
-        <div className="flex items-center justify-between gap-3">
-          <span className="font-text text-caption font-medium whitespace-nowrap text-text-secondary">PR #142</span>
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.span
-              key={finished ? "ok" : "run"}
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: duration.fast, ease: ease.standard }}
-            >
-              <StatusBadge variant={finished ? "success" : "info"}>{finished ? copy.status.done : copy.status.running}</StatusBadge>
-            </motion.span>
-          </AnimatePresence>
-        </div>
-
-        <ul className="mt-3 flex flex-col">
-          {steps.map((s, i) => {
-            const state: StepState = i < done ? "done" : i === done ? "active" : "idle";
-            return (
-              <li key={s.label} className="flex items-center gap-3 border-t border-border-default py-2.5 first:border-t-0">
-                <StepIcon state={state} />
-                <span className={cn("flex-1 text-body-sm transition-colors duration-200 ease-standard", state === "idle" ? "text-text-muted" : "text-text-primary")}>
-                  {s.label}
-                </span>
-                <span className="font-text text-caption whitespace-nowrap text-text-muted tabular-nums">{s.meta}</span>
-              </li>
-            );
-          })}
-        </ul>
-
-        <div className="mt-3 h-1 overflow-hidden rounded-full bg-surface-subtle">
-          <motion.div
-            className="h-full bg-elevate-blue"
-            animate={{ width: `${(done / steps.length) * 100}%` }}
-            transition={{ duration: duration.reveal, ease: ease.emphasized }}
-          />
-        </div>
       </div>
     </VisualPanel>
   );

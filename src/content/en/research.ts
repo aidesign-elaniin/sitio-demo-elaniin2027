@@ -11,6 +11,7 @@ export const research: ResearchCopy = {
   filterLabel: "Filter by type",
   all: "All",
   kinds: { report: "Report", study: "Study" },
+  readTime: "{n} min read",
   topicFilterLabel: "Filter by topic",
   topics: { ai: "AI", cloud: "Cloud", product: "Product" },
   units: { percent: "%", outOfTen: "out of 10" },

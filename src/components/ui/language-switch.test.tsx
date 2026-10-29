@@ -1,6 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { switchLinks, withHash } from "@/lib/routes";
+import { sectionAtLine } from "@/lib/current-section";
 import { LanguageSwitch } from "./language-switch";
 
 const names = { en: "English", es: "Español" };
@@ -49,5 +50,23 @@ describe("LanguageSwitch", () => {
     expect(html).toContain('aria-label="English"');
     expect(html).toContain('aria-label="Español"');
     expect(html).toContain('<nav aria-label="Idioma"');
+  });
+});
+
+describe("sectionAtLine", () => {
+  const tops = (home: number, cases: number, faq: number) => [
+    { id: "home", top: home },
+    { id: "cases", top: cases },
+    { id: "faq", top: faq },
+  ];
+
+  it("answers the last section whose top has passed the line under the bar", () => {
+    expect(sectionAtLine(tops(-1200, -200, 900), 80)).toBe("cases");
+    expect(sectionAtLine(tops(-3000, -1800, -60), 80)).toBe("faq");
+  });
+
+  it("answers null on the hero or when there are no sections, so the switch lands on the top", () => {
+    expect(sectionAtLine(tops(0, 900, 1800), 80)).toBeNull();
+    expect(sectionAtLine([], 80)).toBeNull();
   });
 });

@@ -35,7 +35,7 @@ describe.each([
     for (const r of researchItems) expect(copy.details.research.items[r.id].findings.length).toBeGreaterThan(0);
     for (const a of articles) {
       expect(copy.details.articles.items[a.id].sections.length).toBeGreaterThan(0);
-      expect(copy.nav.resources.latest.items[a.id].title.length).toBeGreaterThan(0);
+      expect(copy.resources.articles[a.id].title.length).toBeGreaterThan(0);
     }
   });
 });

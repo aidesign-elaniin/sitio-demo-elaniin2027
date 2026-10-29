@@ -5,7 +5,7 @@ import { formatMetric, solutionItems } from "./solutions-data";
 
 describe("solutions data", () => {
   it("describes three solutions with neutral ids and numeric metrics", () => {
-    expect(solutionItems.map((s) => s.id)).toEqual(["software", "ai", "cloud"]);
+    expect(solutionItems.map((s) => s.id)).toEqual(["ai", "software", "cloud"]);
     for (const s of solutionItems) expect(s.metrics).toHaveLength(2);
   });
 });
@@ -23,21 +23,31 @@ describe.each([
     }
   });
 
+  it("keeps the card text inside its character budget (the long sentences live in the dialog)", () => {
+    for (const s of solutionItems) {
+      const text = copy.items[s.id];
+      expect(text.lead.length).toBeLessThanOrEqual(28);
+      expect(text.rest.length).toBeLessThanOrEqual(110);
+    }
+    expect(copy.lead.strong.length + copy.lead.rest.length).toBeLessThanOrEqual(130);
+  });
+
   it("keeps the {title} placeholder in the card button name", () => {
     expect(copy.card.details).toContain("{title}");
   });
 
   it("has the strings of the three animated visuals", () => {
-    expect(copy.visuals.software.steps).toHaveLength(4);
-    expect(copy.visuals.ai.answer.length).toBeGreaterThan(0);
-    expect(copy.visuals.cloud.regions.length).toBeGreaterThan(0);
+    expect(copy.visuals.delivery.steps).toHaveLength(4);
+    expect(copy.visuals.product.platform.length).toBeGreaterThan(0);
+    expect(copy.visuals.cloud.availability.length).toBeGreaterThan(0);
   });
 });
 
 describe("formatMetric", () => {
-  const [commit, coverage] = solutionItems[0].metrics;
-  const [uptime, cost] = solutionItems[2].metrics;
-  const [assisted] = solutionItems[1].metrics;
+  const metricsOf = (id: string) => solutionItems.find((s) => s.id === id)!.metrics;
+  const [commit, coverage] = metricsOf("software");
+  const [uptime, cost] = metricsOf("cloud");
+  const [assisted] = metricsOf("ai");
 
   it("formats minutes with the unit of the dictionary", () => {
     expect(formatMetric("en", commit, en.units)).toBe("14 min");

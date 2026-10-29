@@ -20,16 +20,19 @@ import type { Lang } from "@/lib/i18n";
 import type { SwitchLink } from "@/lib/routes";
 import { duration, ease } from "@/lib/motion";
 import { cn } from "@/lib/cn";
-import { EngagementMenu } from "./engagement-menu";
 import { MobileMenu } from "./mobile-menu";
-import { ctaTarget, menuOrder as ORDER, navOrder, plainLinks, resolveTarget, type MenuId } from "./nav-data";
+import { ctaTarget, plainLinks, resolveTarget, resourcesTarget, type MenuId } from "./nav-data";
+import { asset } from "@/lib/asset";
+import { EngagementMenu } from "./engagement-menu";
 import { ResourcesMenu } from "./resources-menu";
 import { SolutionsMenu } from "./solutions-menu";
+
+const ORDER: MenuId[] = ["solutions", "engagement", "resources"];
 const OPEN_DELAY = 80; // ms of intent before the first menu opens
 const CLOSE_DELAY = 140; // ms of grace before the panel closes
 
 const itemClass =
-  "inline-flex h-10 cursor-pointer items-center gap-1.5 rounded-button px-3 font-display text-body-sm font-medium text-text-primary transition-colors duration-150 ease-standard focus-ring group-data-[theme=dark]:text-text-on-dark group-data-[theme=dark]:hover:bg-white/10";
+  "inline-flex h-10 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-button px-3 font-display text-body-sm font-medium text-text-primary transition-colors duration-150 ease-standard focus-ring group-data-[theme=dark]:text-text-on-dark group-data-[theme=dark]:hover:bg-white/10";
 
 /** Keeps the panel height in sync with the visible menu content. Ignores exiting content. */
 function Measured({ onHeight, children }: { onHeight: (h: number) => void; children: ReactNode }) {
@@ -73,7 +76,11 @@ export function NavClient({
 
   const headerRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
-  const triggerRefs = useRef<Record<MenuId, HTMLButtonElement | null>>({ solutions: null, engagement: null, resources: null });
+  const triggerRefs = useRef<Record<MenuId, HTMLButtonElement | null>>({
+    solutions: null,
+    engagement: null,
+    resources: null,
+  });
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const openRef = useRef<MenuId | null>(null);
   const lastPointer = useRef<string>("mouse");
@@ -199,11 +206,11 @@ export function NavClient({
   // The panels and the mobile sheet are white and attach flush under the bar, so the bar stays light while one is open.
   const barTheme = open || mobileOpen ? "light" : theme;
 
-  const labels: Record<MenuId, string> = {
-    solutions: copy.solutions.trigger,
-    engagement: copy.engagement.trigger,
-    resources: copy.resources.trigger,
-  };
+  const triggers: { id: MenuId; label: string }[] = [
+    { id: "solutions", label: copy.solutions.trigger },
+    { id: "engagement", label: copy.engagement.trigger },
+    { id: "resources", label: copy.resources.trigger },
+  ];
 
   const heightTransition = reduce ? { duration: 0 } : { duration: duration.slow, ease: ease.emphasized };
 
@@ -225,10 +232,14 @@ export function NavClient({
         data-tone={barTheme === "black" ? "black" : "blue"}
         className="group sticky top-0 z-50 h-[var(--nav-height)] border-b border-border-default bg-white/80 backdrop-blur-sm transition-colors duration-150 ease-standard data-[theme=dark]:border-border-on-dark data-[theme=dark]:bg-surface-dark/80 data-[theme=dark]:data-[tone=black]:bg-surface-dark-alt/80"
       >
-        <div className="container-site flex h-full items-center gap-6">
-          <Link href={resolveTarget({ route: "home", anchor: "home" }, lang)} aria-label={copy.homeAria} className="shrink-0 rounded-button focus-ring">
+        <div className="container-site flex h-full items-center gap-4 xl:gap-6">
+          <Link
+            href={resolveTarget({ route: "home", anchor: "home" }, lang)}
+            aria-label={copy.homeAria}
+            className="shrink-0 rounded-button focus-ring"
+          >
             <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_PATH}/assets/logotipo-elaniin.svg`}
+              src={asset("/assets/logotipo-elaniin.svg")}
               alt="Elaniin"
               width={104}
               height={28}
@@ -236,7 +247,7 @@ export function NavClient({
               className="h-7 w-auto group-data-[theme=dark]:hidden"
             />
             <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_PATH}/assets/white-logotipo-elaniin.svg`}
+              src={asset("/assets/white-logotipo-elaniin.svg")}
               alt="Elaniin"
               width={104}
               height={28}
@@ -244,28 +255,8 @@ export function NavClient({
             />
           </Link>
 
-          <nav aria-label={common.mainNav} className="ml-4 hidden items-center gap-1 lg:flex">
-            {navOrder.map((item) => {
-              if (item.kind === "link") {
-                const link = plainLinks.find((l) => l.id === item.id)!;
-                return (
-                  <Link
-                    key={link.id}
-                    href={resolveTarget(link.to, lang)}
-                    onPointerEnter={(e) => e.pointerType === "mouse" && scheduleClose(100)}
-                    className={cn(itemClass, "hover:bg-surface-subtle")}
-                  >
-                    {/* Applied AI is the brand differentiator: a small Elevate Blue dot (detail only). */}
-                    <span
-                      aria-hidden="true"
-                      className="size-1.5 rounded-full bg-elevate-blue group-data-[theme=dark]:bg-text-on-dark-accent"
-                    />
-                    {copy.plain[link.id]}
-                  </Link>
-                );
-              }
-              const id = item.id;
-              const label = labels[id];
+          <nav aria-label={common.mainNav} className="hidden items-center gap-1 lg:flex xl:ml-4">
+            {triggers.map(({ id, label }) => {
               const isOpen = open === id;
               return (
                 <button
@@ -294,10 +285,27 @@ export function NavClient({
                 </button>
               );
             })}
+            {plainLinks.map((link) => (
+              <Link
+                key={link.id}
+                href={resolveTarget(link.to, lang)}
+                onPointerEnter={(e) => e.pointerType === "mouse" && scheduleClose(100)}
+                className={cn(itemClass, "hover:bg-surface-subtle")}
+              >
+                {copy.plain[link.id]}
+              </Link>
+            ))}
           </nav>
 
           <div className="ml-auto flex items-center gap-3">
             <LanguageSwitch links={switchLinks} label={common.language.label} className="hidden lg:flex" />
+            <Button
+              href={resolveTarget(resourcesTarget, lang)}
+              variant="secondary"
+              className="max-lg:hidden group-data-[theme=dark]:border-border-on-dark-strong group-data-[theme=dark]:bg-transparent group-data-[theme=dark]:text-white group-data-[theme=dark]:hover:bg-white/10"
+            >
+              {copy.blog}
+            </Button>
             <Button href={resolveTarget(ctaTarget, lang)}>{copy.cta}</Button>
             <button
               type="button"
@@ -355,13 +363,9 @@ export function NavClient({
                         transition={{ duration: duration.base, ease: ease.emphasized }}
                       >
                         <Measured onHeight={setHeight}>
-                          {open === "solutions" ? (
-                            <SolutionsMenu lang={lang} copy={copy} />
-                          ) : open === "engagement" ? (
-                            <EngagementMenu lang={lang} copy={copy} onNavigate={closeNow} />
-                          ) : (
-                            <ResourcesMenu lang={lang} copy={copy} onNavigate={closeNow} />
-                          )}
+                          {open === "solutions" && <SolutionsMenu lang={lang} copy={copy} />}
+                          {open === "engagement" && <EngagementMenu lang={lang} copy={copy} onNavigate={closeNow} />}
+                          {open === "resources" && <ResourcesMenu lang={lang} copy={copy} onNavigate={closeNow} />}
                         </Measured>
                       </motion.div>
                     </AnimatePresence>

@@ -1,91 +1,116 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion, useInView, useReducedMotion } from "motion/react";
-import { CountUp } from "@/components/ui/count-up";
-import { StatusBadge } from "@/components/ui/status-badge";
+import { Activity } from "lucide-react";
+import { Floor } from "@/components/ui/iso/floor";
+import { clamp01, easeOutCubic, pointsAttr, SCENE_W } from "@/components/ui/iso/iso";
+import { IsoPill, pillLength } from "@/components/ui/iso/pill";
+import { Slab, type SlabBox, topFace } from "@/components/ui/iso/slab";
 import type { CloudVisualCopy } from "@/content/schema";
-import type { Lang } from "@/lib/i18n";
-import { ease } from "@/lib/motion";
-import { blue, neutral } from "@/lib/tokens";
+import { cn } from "@/lib/cn";
+import { useClock } from "@/lib/use-clock";
 import { VisualPanel, type VisualSize } from "./visual-panel";
 
 /*
-  Cloud card: a grid of square modules (the brand's building block) standing for traffic across regions.
-  Cells light up and fade in discrete steps up the blue ramp; three fixed squares mark active regions. The rings of the
-  regions loop without depending on visibility (a restart on every scroll made them pop).
+  Cloud card (DESIGN.md components.solutions-grid, mocks): one long glass bar in the cloud look carrying the pill
+  "Availability", and beside it twelve small cubes (the instances) that drop in one by one as demand grows, three columns by
+  four rows. Each lights its top edge in Elevate Blue as it lands and settles. The loop fades out and restarts. Under
+  prefers-reduced-motion the scene rests on the full set of instances.
 */
-const COLS = 12;
-const ROWS = 5;
-const N = COLS * ROWS;
-const REGIONS = new Set([1 * COLS + 2, 3 * COLS + 6, 1 * COLS + 9]);
-
-const stepColor = (v: number) =>
-  v >= 0.66 ? blue[500] : v >= 0.33 ? blue[400] : v >= 0.08 ? blue[300] : neutral.border;
-
-// Deterministic start (also the static state for reduced motion): same on server and client.
-const initial = () => Array.from({ length: N }, (_, i) => (i % 13 === 0 ? 1 : i % 11 === 0 ? 0.5 : 0));
+const COLS = 3;
+const ROWS = 4;
+const CUBE = 28;
+const PITCH = 44;
+const CUBE_H = 16;
+const BAR_W = 76;
+const LIFT = 28;
+const O = { x: 190, y: 42 };
+const T = { first: 1100, every: 380, dropDur: 700, reset: 8300, loop: 9100, rest: 7000 };
 
 export function CloudVisual({
   copy,
-  lang,
   size = "card",
   bare = false,
 }: {
   copy: CloudVisualCopy;
-  lang: Lang;
   size?: VisualSize;
   bare?: boolean;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  // "some": the grid keeps running while any part of it is on screen (with 0.5 it froze half visible while scrolling).
-  const inView = useInView(ref, { amount: "some" });
-  const reduce = useReducedMotion();
-  const [lit, setLit] = useState<number[]>(initial);
+  const { ref, t } = useClock(T.loop, 50, T.rest);
+  const fade = 1 - clamp01((t - T.reset) / (T.loop - T.reset));
 
-  useEffect(() => {
-    if (reduce || !inView) return;
-    const id = setInterval(() => {
-      setLit((prev) => {
-        const next = prev.map((v) => (v * 0.62 < 0.08 ? 0 : v * 0.62));
-        for (let k = 0; k < 3; k++) next[Math.floor(Math.random() * N)] = 1;
-        return next;
-      });
-    }, 140);
-    return () => clearInterval(id);
-  }, [inView, reduce]);
+  const depth = pillLength(copy.availability) + 16;
+  const gridX = BAR_W + 28;
+  const plate: SlabBox = {
+    x: -12,
+    y: -12,
+    z: 0,
+    w: gridX + COLS * PITCH - (PITCH - CUBE) + 24,
+    d: depth + 24,
+    h: 10,
+  };
+  const bar: SlabBox = { x: 0, y: 0, z: plate.h, w: BAR_W, d: depth, h: 26 };
+  const gridY = (depth - (ROWS * PITCH - (PITCH - CUBE))) / 2;
+
+  const cubes = Array.from({ length: COLS * ROWS }, (_, i) => {
+    const col = i % COLS;
+    const row = Math.floor(i / COLS);
+    const box: SlabBox = {
+      x: gridX + col * PITCH,
+      y: gridY + row * PITCH,
+      z: plate.h,
+      w: CUBE,
+      d: CUBE,
+      h: CUBE_H,
+    };
+    const start = T.first + i * T.every;
+    return {
+      key: i,
+      box,
+      dz: 60 * (1 - easeOutCubic((t - start) / T.dropDur)),
+      present: clamp01((t - start) / 300) * fade,
+      lit: t < start + T.dropDur ? 0 : clamp01(1 - (t - start - T.dropDur) / 450) * fade,
+    };
+  });
+  // Nearest to the viewer last.
+  const ordered = [...cubes].sort((a, b) => a.box.x + a.box.y - (b.box.x + b.box.y));
 
   return (
-    <VisualPanel size={size} bare={bare} className="gap-4">
-      <div ref={ref} className="grid w-full max-w-sm grid-cols-12 gap-1">
-        {lit.map((v, i) => {
-          const region = REGIONS.has(i);
-          return (
-            <div
-              key={i}
-              className="relative aspect-square rounded-module transition-colors duration-150 ease-standard"
-              style={{ backgroundColor: region ? blue[500] : stepColor(v) }}
-            >
-              {region && !reduce && (
-                <motion.span
-                  className="absolute inset-0 rounded-module border border-elevate-blue"
-                  animate={{ scale: [1, 2.6], opacity: [0.7, 0] }}
-                  transition={{ repeat: Infinity, duration: 2, ease: ease.standard, delay: (i % 3) * 0.5 }}
-                />
-              )}
-            </div>
-          );
-        })}
-      </div>
+    <VisualPanel size={size} bare={bare} className="p-2 max-md:p-2">
+      <div ref={ref} className={cn("w-full", size === "fill" ? "max-w-[460px]" : "max-w-[320px] lg:max-w-none")}>
+        <svg viewBox={`0 0 ${SCENE_W} 300`} className="block h-auto w-full overflow-visible" focusable="false">
+          <Floor o={O} x={plate.x + 8} y={plate.y + 8} w={plate.w - 16} d={plate.d - 16} z={-LIFT} />
+          <g className="iso-levitate">
+            <Slab look="plate" box={plate} o={O} />
+            <Slab look="cloud" box={bar} o={O} />
+            <IsoPill
+              o={O}
+              z={bar.z + bar.h}
+              cx={bar.w / 2}
+              cy={depth / 2}
+              name={copy.availability}
+              icon={Activity}
+              index={0}
+            />
 
-      <div className="flex w-full max-w-sm items-end justify-between rounded-menu border border-border-default bg-white p-3 shadow-card-rest">
-        <div className="flex flex-col gap-1">
-          <span className="font-text text-caption leading-none font-medium text-text-secondary">{copy.availability}</span>
-          <span className="font-display text-h3 font-medium text-text-primary tabular-nums">
-            <CountUp to={99.98} decimals={2} suffix="%" lang={lang} />
-          </span>
-        </div>
-        <StatusBadge variant="success">{copy.regions}</StatusBadge>
+            {ordered.map((c) => (
+              <g key={c.key} transform={`translate(0 ${(-c.dz).toFixed(2)})`} style={{ opacity: c.present }}>
+                <Slab look="cloud" box={c.box} o={O} texture={false} />
+                {c.lit > 0 && (
+                  <polygon
+                    points={pointsAttr(topFace(c.box), O)}
+                    style={{
+                      fill: "none",
+                      stroke: "var(--color-elevate-blue)",
+                      strokeWidth: 2,
+                      strokeLinejoin: "round",
+                      opacity: c.lit,
+                    }}
+                  />
+                )}
+              </g>
+            ))}
+          </g>
+        </svg>
       </div>
     </VisualPanel>
   );

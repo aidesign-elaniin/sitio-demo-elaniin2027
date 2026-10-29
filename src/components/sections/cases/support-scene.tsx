@@ -1,7 +1,8 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { Check, Pencil, Send, Sparkles, TrendingUp } from "lucide-react";
+import { Check, Pencil, Send, TrendingUp } from "lucide-react";
+import { AiIcon } from "@/components/ui/icons/elaniin-icons";
 import { clamp } from "@/lib/chart";
 import type { SupportSceneCopy } from "@/content/schema";
 import { cn } from "@/lib/cn";
@@ -74,7 +75,7 @@ export function SupportScene({ accent, copy }: { accent: string; copy: SupportSc
                   transition={{ duration: duration.base, ease: ease.emphasized }}
                 >
                   <div className="flex items-center gap-1.5 font-text text-caption font-medium text-[var(--accent-ink)]">
-                    <Sparkles className="size-3.5" strokeWidth={1.75} />
+                    <AiIcon className="size-3.5" strokeWidth={1.75} />
                     {copy.suggested}
                     {reviewed && (
                       <span className="ml-auto flex items-center gap-1 font-normal">
